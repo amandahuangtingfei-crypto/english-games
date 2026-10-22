@@ -654,7 +654,7 @@ function nextBalTarget(){
     el.style.background=BCOLORS[Math.floor(Math.random()*BCOLORS.length)];
     el.style.left=lanes[i]+"%";
     stage.appendChild(el);
-    var b={el:el,w:w,y:-95-i*38-Math.random()*20,speed:30+Math.random()*10,dead:false};
+    var b={el:el,w:w,y:-95-i*38-Math.random()*20,speed:60+Math.random()*12,dead:false};
     balBalloons.push(b);
     el.addEventListener("click",function(){balPop(b)});
   });
