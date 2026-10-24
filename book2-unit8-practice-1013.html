@@ -16,7 +16,7 @@ header.top .spacer{flex:1}
 button{font-family:inherit;cursor:pointer}
 .sfxbtn{font-size:14px;font-weight:700;background:#DDEEDF;color:#234434;border:1.5px solid #CBE3D0;border-radius:999px;padding:6px 12px}
 .sfxbtn.off{background:#fff;color:#5A7263}
-nav.quick{position:sticky;top:57px;z-index:40;background:rgba(244,251,245,.95);border-bottom:1px solid #CBE3D0;padding:7px 10px;display:flex;gap:7px;overflow-x:auto;white-space:nowrap}
+nav.quick{position:sticky;top:57px;z-index:40;background:rgba(244,251,245,.95);border-bottom:1px solid #CBE3D0;padding:7px 10px;display:flex;flex-wrap:nowrap;gap:7px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
 nav.quick a{font-size:13.5px;font-weight:700;color:#234434;background:#fff;border:1.5px solid #CBE3D0;border-radius:999px;padding:5px 11px;text-decoration:none}
 nav.quick a:active{background:#DDEEDF}
 main{max-width:1060px;margin:0 auto;padding:14px 12px 60px}
@@ -31,9 +31,9 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 /* word cards */
 .wordgrid{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:820px){.wordgrid{grid-template-columns:1fr 1fr}}
-.wcard{display:flex;gap:12px;background:#fff;border:1.5px solid #CBE3D0;border-radius:16px;padding:10px;align-items:stretch}
-.wcard img{width:118px;min-height:110px;object-fit:cover;border-radius:12px;background:#F4FBF5;flex:none}
-@media(min-width:820px){.wcard img{width:150px}}
+.wcard{display:flex;gap:9px;background:#fff;border:1.5px solid #CBE3D0;border-radius:16px;padding:8px;align-items:stretch}
+.wcard img{width:72px;min-height:70px;object-fit:cover;border-radius:12px;background:#F4FBF5;flex:none}
+@media(min-width:820px){.wcard img{width:92px}}
 .wbody{flex:1;min-width:0}
 .wrow1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .wbtn{font-size:23px;font-weight:800;color:#234434;background:#DDEEDF;border:1.5px solid #4C9A62;border-radius:12px;padding:3px 12px}
@@ -45,7 +45,7 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 .wdef{font-size:15px;margin-top:5px;line-height:1.45}
 .wzh{font-size:13.5px;color:#5A7263;margin-top:2px}
 .wforms{font-size:12.5px;color:#5A7263;margin-top:3px}
-.exline{margin-top:7px;font-size:14.5px;line-height:1.5;background:#F4FBF5;border:1.5px solid #CBE3D0;border-radius:10px;padding:6px 9px;width:100%;text-align:left;color:#234434}
+.exline{margin-top:7px;font-size:13.5px;line-height:1.35;background:#F4FBF5;border:1.5px solid #CBE3D0;border-radius:10px;padding:5px 8px;width:100%;text-align:left;color:#234434}
 .exline:active{border-color:#4C9A62;background:#DDEEDF}
 .exline .playico{color:#4C9A62;font-weight:800}
 .playing{outline:3px solid #EF7D6E!important;outline-offset:1px}
@@ -62,19 +62,17 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 .artpop .ap-replay{margin-top:9px;font-size:15px;font-weight:800;background:#4C9A62;color:#fff;border:none;border-radius:10px;padding:8px 18px;min-height:44px}
 .artpop-hint{font-size:14.5px;color:#5A7263}
 /* tabs / home entries */
-.tabbtn{font-size:13.5px;font-weight:700;color:#234434;background:#fff;border:1.5px solid #CBE3D0;border-radius:999px;padding:5px 11px}
+.tabbtn{font-size:13.5px;font-weight:700;color:#234434;background:#fff;border:1.5px solid #CBE3D0;border-radius:999px;padding:5px 11px;flex:none;white-space:nowrap}
 .tabbtn.active{background:#4C9A62;color:#fff;border-color:#4C9A62}
 .tabpage{display:none}
 .tabpage.active{display:block}
 .backbtn{font-size:13.5px;font-weight:800;background:#DDEEDF;color:#234434;border:1.5px solid #4C9A62;border-radius:999px;padding:5px 13px;margin-bottom:10px;min-height:38px}
-.entries{display:grid;grid-template-columns:1fr;gap:11px}
-@media(min-width:700px){.entries{grid-template-columns:1fr 1fr}}
-.entry{display:flex;align-items:center;gap:11px;text-align:left;background:#F4FBF5;border:1.5px solid #CBE3D0;border-radius:14px;padding:13px 14px;color:#234434;width:100%}
+.entries{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.entry{display:flex;align-items:center;gap:8px;text-align:left;background:#F4FBF5;border:1.5px solid #CBE3D0;border-radius:14px;padding:8px 11px;color:#234434;flex:none;white-space:nowrap}
 .entry:active{border-color:#4C9A62;background:#DDEEDF}
-.entry .eno{flex:none;width:34px;height:34px;border-radius:50%;background:#4C9A62;color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center}
-.entry .et{display:block;font-size:17.5px;font-weight:800}
-.entry .ed{display:block;font-size:13px;color:#5A7263;margin-top:1px}
-.entry .es{margin-left:auto;font-size:13.5px;font-weight:800;background:#FFF7DF;border:1.5px solid #F7CE68;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.entry .eno{flex:none;width:26px;height:26px;border-radius:50%;background:#4C9A62;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.entry .et{display:block;font-size:15px;font-weight:800}
+.entry .es{margin-left:6px;font-size:12.5px;font-weight:800;background:#FFF7DF;border:1.5px solid #F7CE68;border-radius:999px;padding:2px 8px;white-space:nowrap}
 /* sort */
 .bank{display:flex;flex-wrap:wrap;gap:8px;background:#F4FBF5;border:1.5px dashed #4C9A62;border-radius:14px;padding:11px;min-height:56px}
 .chip{font-size:17px;font-weight:700;background:#fff;border:2px solid #4C9A62;color:#234434;border-radius:999px;padding:6px 15px}
@@ -163,16 +161,15 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 
 <section id="sec-home" class="tabpage active">
   <h2><span class="bar"></span>选一个板块开始 <span class="secstars">一次只练一个板块</span></h2>
-  <p class="howto">点下面的入口进入一个板块；做完点板块左上角的「← 全部板块」或顶部页签，换下一个。已经得的星星不会丢。</p>
   <div class="entries">
-    <button class="entry" data-goto="words" type="button"><span class="eno">1</span><span><span class="et">单词点读</span><span class="ed">20 个词 · 点词读词、点例句读句</span></span><span class="es" id="es-words">点读</span></button>
-    <button class="entry" data-goto="article" type="button"><span class="eno">2</span><span><span class="et">文章点读</span><span class="ed">在课本原图上点句点读 · 带中文翻译</span></span><span class="es" id="es-article">点读</span></button>
-    <button class="entry" data-goto="sort" type="button"><span class="eno">3</span><span><span class="et">词性分类大挑战</span><span class="ed">20 个词分进名词 / 动词 / 形容词</span></span><span class="es" id="es-sort">⭐ 0/20</span></button>
-    <button class="entry" data-goto="guess" type="button"><span class="eno">4</span><span><span class="et">释义猜词</span><span class="ed">看英文释义猜词，再判词性 · 10 轮</span></span><span class="es" id="es-guess">⭐ 0/10</span></button>
-    <button class="entry" data-goto="insent" type="button"><span class="eno">5</span><span><span class="et">句中判词性</span><span class="ed">看句子里目标词的词性 · 10 轮</span></span><span class="es" id="es-insent">⭐ 0/10</span></button>
-    <button class="entry" data-goto="clues" type="button"><span class="eno">6</span><span><span class="et">阅读理解</span><span class="ed">读课文内容答问题 · 6 道选择题</span></span><span class="es" id="es-clues">⭐ 0/6</span></button>
-    <button class="entry" data-goto="keyinfo" type="button"><span class="eno">7</span><span><span class="et">关键信息快查</span><span class="ed">商店 / 时间 / 备货速度 · 3 题</span></span><span class="es" id="es-keyinfo">⭐ 0/3</span></button>
-    <button class="entry" data-goto="balloon" type="button"><span class="eno">8</span><span><span class="et">词性戳气球</span><span class="ed">只戳指定词性的气球 · 3 轮</span></span><span class="es" id="es-balloon">⭐ 0/14</span></button>
+    <button class="entry" data-goto="words" type="button"><span class="eno">1</span><span><span class="et">单词点读</span></span><span class="es" id="es-words">点读</span></button>
+    <button class="entry" data-goto="article" type="button"><span class="eno">2</span><span><span class="et">文章点读</span></span><span class="es" id="es-article">点读</span></button>
+    <button class="entry" data-goto="sort" type="button"><span class="eno">3</span><span><span class="et">词性分类大挑战</span></span><span class="es" id="es-sort">⭐ 0/20</span></button>
+    <button class="entry" data-goto="guess" type="button"><span class="eno">4</span><span><span class="et">释义猜词</span></span><span class="es" id="es-guess">⭐ 0/10</span></button>
+    <button class="entry" data-goto="insent" type="button"><span class="eno">5</span><span><span class="et">句中判词性</span></span><span class="es" id="es-insent">⭐ 0/10</span></button>
+    <button class="entry" data-goto="clues" type="button"><span class="eno">6</span><span><span class="et">阅读理解</span></span><span class="es" id="es-clues">⭐ 0/6</span></button>
+    <button class="entry" data-goto="keyinfo" type="button"><span class="eno">7</span><span><span class="et">关键信息快查</span></span><span class="es" id="es-keyinfo">⭐ 0/3</span></button>
+    <button class="entry" data-goto="balloon" type="button"><span class="eno">8</span><span><span class="et">词性戳气球</span></span><span class="es" id="es-balloon">⭐ 0/14</span></button>
   </div>
 </section>
 
