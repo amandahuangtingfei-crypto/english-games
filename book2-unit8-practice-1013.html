@@ -61,18 +61,11 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 .artpop .ap-zh{font-size:15px;color:#47604F;line-height:1.55;margin-top:4px}
 .artpop .ap-replay{margin-top:9px;font-size:15px;font-weight:800;background:#4C9A62;color:#fff;border:none;border-radius:10px;padding:8px 18px;min-height:44px}
 .artpop-hint{font-size:14.5px;color:#5A7263}
-/* tabs / home entries */
+/* tabs */
 .tabbtn{font-size:13.5px;font-weight:700;color:#234434;background:#fff;border:1.5px solid #CBE3D0;border-radius:999px;padding:5px 11px;flex:none;white-space:nowrap}
 .tabbtn.active{background:#4C9A62;color:#fff;border-color:#4C9A62}
 .tabpage{display:none}
 .tabpage.active{display:block}
-.backbtn{font-size:13.5px;font-weight:800;background:#DDEEDF;color:#234434;border:1.5px solid #4C9A62;border-radius:999px;padding:5px 13px;margin-bottom:10px;min-height:38px}
-.entries{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
-.entry{display:flex;align-items:center;gap:8px;text-align:left;background:#F4FBF5;border:1.5px solid #CBE3D0;border-radius:14px;padding:8px 11px;color:#234434;flex:none;white-space:nowrap}
-.entry:active{border-color:#4C9A62;background:#DDEEDF}
-.entry .eno{flex:none;width:26px;height:26px;border-radius:50%;background:#4C9A62;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
-.entry .et{display:block;font-size:15px;font-weight:800}
-.entry .es{margin-left:6px;font-size:12.5px;font-weight:800;background:#FFF7DF;border:1.5px solid #F7CE68;border-radius:999px;padding:2px 8px;white-space:nowrap}
 /* sort */
 .bank{display:flex;flex-wrap:wrap;gap:8px;background:#F4FBF5;border:1.5px dashed #4C9A62;border-radius:14px;padding:11px;min-height:56px}
 .chip{font-size:17px;font-weight:700;background:#fff;border:2px solid #4C9A62;color:#234434;border-radius:999px;padding:6px 15px}
@@ -153,35 +146,19 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
   <button class="sfxbtn" id="sfxBtn" type="button">🔔 音效：开</button>
 </header>
 <nav class="quick" id="tabBar">
-  <button class="tabbtn active" data-goto="home" type="button">🏠 板块目录</button><button class="tabbtn" data-goto="words" type="button">1 单词点读</button><button class="tabbtn" data-goto="article" type="button">2 文章点读</button><button class="tabbtn" data-goto="sort" type="button">3 词性分类</button><button class="tabbtn" data-goto="guess" type="button">4 释义猜词</button><button class="tabbtn" data-goto="insent" type="button">5 句中判词性</button><button class="tabbtn" data-goto="clues" type="button">6 阅读理解</button><button class="tabbtn" data-goto="keyinfo" type="button">7 关键信息快查</button><button class="tabbtn" data-goto="balloon" type="button">8 戳气球</button>
+  <button class="tabbtn active" data-goto="words" type="button">1 单词点读</button><button class="tabbtn" data-goto="article" type="button">2 文章点读</button><button class="tabbtn" data-goto="sort" type="button">3 词性分类</button><button class="tabbtn" data-goto="guess" type="button">4 释义猜词</button><button class="tabbtn" data-goto="insent" type="button">5 句中判词性</button><button class="tabbtn" data-goto="clues" type="button">6 阅读理解</button><button class="tabbtn" data-goto="keyinfo" type="button">7 关键信息快查</button><button class="tabbtn" data-goto="balloon" type="button">8 戳气球</button>
 </nav>
 <main>
 <div class="statusline" id="playStatus"></div>
 <button id="retryBtn" type="button">🔁 Listen again</button>
 
-<section id="sec-home" class="tabpage active">
-  <h2><span class="bar"></span>选一个板块开始 <span class="secstars">一次只练一个板块</span></h2>
-  <div class="entries">
-    <button class="entry" data-goto="words" type="button"><span class="eno">1</span><span><span class="et">单词点读</span></span><span class="es" id="es-words">点读</span></button>
-    <button class="entry" data-goto="article" type="button"><span class="eno">2</span><span><span class="et">文章点读</span></span><span class="es" id="es-article">点读</span></button>
-    <button class="entry" data-goto="sort" type="button"><span class="eno">3</span><span><span class="et">词性分类大挑战</span></span><span class="es" id="es-sort">⭐ 0/20</span></button>
-    <button class="entry" data-goto="guess" type="button"><span class="eno">4</span><span><span class="et">释义猜词</span></span><span class="es" id="es-guess">⭐ 0/10</span></button>
-    <button class="entry" data-goto="insent" type="button"><span class="eno">5</span><span><span class="et">句中判词性</span></span><span class="es" id="es-insent">⭐ 0/10</span></button>
-    <button class="entry" data-goto="clues" type="button"><span class="eno">6</span><span><span class="et">阅读理解</span></span><span class="es" id="es-clues">⭐ 0/6</span></button>
-    <button class="entry" data-goto="keyinfo" type="button"><span class="eno">7</span><span><span class="et">关键信息快查</span></span><span class="es" id="es-keyinfo">⭐ 0/3</span></button>
-    <button class="entry" data-goto="balloon" type="button"><span class="eno">8</span><span><span class="et">词性戳气球</span></span><span class="es" id="es-balloon">⭐ 0/14</span></button>
-  </div>
-</section>
-
-<section id="sec-words" class="tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
+<section id="sec-words" class="tabpage active">
   <h2><span class="bar"></span>一、单词点读 <span class="secstars" id="st-words">20 个词</span></h2>
   <p class="howto">Tap a green word to hear the word. Tap the sentence under it to hear the whole sentence. Listen first, then read along.</p>
   <div class="wordgrid" id="wordGrid"></div>
 </section>
 
 <section id="sec-article" class="soft tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>二、文章点读 <span class="secstars">11 句</span></h2>
   <p class="howto">Tap a sentence right on the textbook page: you will hear it, and its Chinese meaning will show below the picture. Find every sentence in your own book.</p>
   <div class="storywrap" id="storyWrap"><img class="storyimg" id="storyImg" alt="Unit 8 课文原图 Super Supermarket Deals" loading="lazy"></div>
@@ -189,7 +166,6 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 </section>
 
 <section id="sec-sort" class="tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>三、词性分类大挑战 <span class="secstars" id="st-sort">⭐ 0/20</span></h2>
   <p class="howto">We sort the 20 words round by round: Round 1 — nouns (11), Round 2 — verbs (4), Round 3 — adjectives (5). Just tap a word: if it belongs to this round, it goes into the box by itself and you get a star. Not this round's word? No star — try another one!</p>
   <div class="roundprompt" id="sortRound"></div>
@@ -200,7 +176,6 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 </section>
 
 <section id="sec-guess" class="soft tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>四、释义猜词 <span class="secstars" id="st-guess">⭐ 0/10</span></h2>
   <p class="howto">Read the English definition and guess the word. Then choose its part of speech. Get both steps right the first time to earn a star. 10 rounds.</p>
   <div class="progress" id="guessProg"></div>
@@ -208,7 +183,6 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 </section>
 
 <section id="sec-insent" class="tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>五、句中判词性 <span class="secstars" id="st-insent">⭐ 0/10</span></h2>
   <p class="howto">Look at the underlined word in each sentence. What part of speech is it in this sentence? 10 rounds.</p>
   <div class="progress" id="insentProg"></div>
@@ -216,21 +190,18 @@ h2 .bar{width:6px;height:22px;background:#4C9A62;border-radius:3px;display:inlin
 </section>
 
 <section id="sec-clues" class="soft tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>六、阅读理解 <span class="secstars" id="st-clues">⭐ 0/6</span></h2>
   <p class="howto">Read each question and choose the best answer. Every answer is in the passage — go back to the article section if you need to check. Get it right to earn a star!</p>
   <div id="readList"></div>
 </section>
 
 <section id="sec-keyinfo" class="tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>七、关键信息快查 <span class="secstars" id="st-keyinfo">⭐ 0/3</span></h2>
   <p class="howto">Key facts about the sale: when it begins, when it ends, and who can shop here. Choose the right answer — the sentence from the passage will show.</p>
   <div id="keyinfoList"></div>
 </section>
 
 <section id="sec-balloon" class="soft tabpage">
-  <button class="backbtn" data-goto="home" type="button">← 全部板块</button>
   <h2><span class="bar"></span>八、词性戳气球 <span class="secstars" id="st-balloon">⭐ 0/14</span></h2>
   <p class="howto">In each round, pop only the balloons with words of one part of speech. A right pop earns a star; a wrong pop costs one chance (3 chances in each round). 3 rounds: Nouns → Verbs → Adjectives.</p>
   <div class="bhud"><span class="pill" id="bTask">Tap "Start" to begin Round 1</span><span class="pill">Chances: <span id="bChance">3</span></span><span class="pill">Popped: <span id="bGot">0</span>/<span id="bTargetN">5</span></span></div>
@@ -853,7 +824,7 @@ $("bStart").addEventListener("click",function(){
 });
 
 /* ============ 页签分板块：一次只显示一个板块 ============ */
-var TABLIST=["home","words","article","sort","guess","insent","clues","keyinfo","balloon"];
+var TABLIST=["words","article","sort","guess","insent","clues","keyinfo","balloon"];
 function showTab(id){
   TABLIST.forEach(function(t){
     var sec=$("sec-"+t);if(sec)sec.classList.toggle("active",t===id);
