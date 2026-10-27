@@ -7,160 +7,224 @@
 <link rel="icon" href="data:," />
 <title>Unit 5 Review Game</title>
 <style>
+/* ============================================================
+   Design tokens — Claymorphism for kids, Lexue pale-green brand
+   spacing: 4/8 rhythm (4/8/12/16/24/32) · type: fixed scale
+   ============================================================ */
 :root{
-  --bg:#EFF8F1; --bg2:#E4F3E8; --card:#F4FBF5; --panel:#FFFFFF;
-  --ink:#234434; --ink2:#4a6b58; --line:#CBE3D0; --green:#4C9A62; --green-d:#35714a;
-  --fill:#DDEEDF; --coral:#EF7D6E; --yellow:#F7CE68; --gold:#E9A820; --goldbg:#FFF3D6;
-  --bad:#e5b3ad; --shadow:0 2px 10px rgba(35,68,52,.10);
+  /* color — semantic tokens (brand palette unchanged) */
+  --primary:#4C9A62;        /* 主绿 */
+  --primary-dark:#35714a;   /* 深绿文字/按下 */
+  --surface:#F4FBF5;        /* 卡片面 */
+  --panel:#FFFFFF;          /* 按钮面 */
+  --bg:#EFF8F1;             /* 页底（上） */
+  --bg-deep:#E4F3E8;        /* 页底（下） */
+  --text:#234434;           /* 正文 */
+  --muted:#41604d;          /* 说明文字（≥4.5:1） */
+  --border:#CBE3D0;         /* 边框 */
+  --fill:#DDEEDF;           /* 浅绿填充 */
+  --danger:#EF7D6E;         /* 珊瑚（填充/边框） */
+  --danger-text:#C0452F;    /* 珊瑚文字（≥4.5:1） */
+  --danger-soft:#e5b3ad;
+  --accent:#F7CE68;         /* 星星金黄 */
+  --accent-dark:#E9A820;    /* 金色描边 */
+  --accent-text:#8a5f00;    /* 金色文字（≥4.5:1） */
+  --accent-bg:#FFF3D6;
+  /* legacy aliases — referenced by inline styles in the script */
+  --line:var(--border); --ink:var(--text); --ink2:var(--muted);
+  --green:var(--primary); --green-d:var(--primary-dark); --card:var(--surface);
+  --bg2:var(--bg-deep); --coral:var(--danger); --yellow:var(--accent);
+  --gold:var(--accent-dark); --goldbg:var(--accent-bg); --bad:var(--danger-soft);
+  /* spacing — 4/8 rhythm only */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px; --sp-8:32px;
+  /* radii */
+  --r-sm:12px; --r-md:16px; --r-lg:20px; --r-pill:999px;
+  /* type scale */
+  --fs-title:20px;  /* 板块标题 700 */
+  --fs-card:16px;   /* 卡片标题 600 */
+  --fs-body:15px;   /* 正文/题干 400 */
+  --fs-note:13px;   /* 说明 400 */
+  --fs-tag:12px;    /* 小标签/题号 500 */
+  /* icon token */
+  --icon:16px;
+  /* clay shadows: outer drop + inner top highlight + inner bottom shade */
+  --clay:0 8px 16px rgba(35,68,52,.12), inset 0 2px 2px rgba(255,255,255,.75), inset 0 -4px 6px rgba(35,68,52,.06);
+  --clay-sm:0 4px 8px rgba(35,68,52,.10), inset 0 1px 1px rgba(255,255,255,.75), inset 0 -2px 3px rgba(35,68,52,.05);
+  --clay-press:0 2px 4px rgba(35,68,52,.10), inset 0 2px 5px rgba(35,68,52,.10);
+  --shadow:var(--clay);
 }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#14231a; --bg2:#101c14; --card:#1c2f23; --panel:#1c2f23; --ink:#e3f2e7; --ink2:#a9c6b2;
-    --line:#33523e; --green:#63b57c; --green-d:#8fd0a2; --fill:#264433; --goldbg:#4a3a12; --shadow:0 2px 10px rgba(0,0,0,.4); }
+  :root{
+    --primary:#63b57c; --primary-dark:#8fd0a2; --surface:#1c2f23; --panel:#1c2f23;
+    --bg:#14231a; --bg-deep:#101c14; --text:#e3f2e7; --muted:#b7d3c0;
+    --border:#33523e; --fill:#264433; --accent-bg:#4a3a12; --accent-text:#F7CE68;
+    --danger-text:#ff9d8f;
+    --clay:0 8px 16px rgba(0,0,0,.45), inset 0 2px 2px rgba(255,255,255,.07), inset 0 -4px 6px rgba(0,0,0,.25);
+    --clay-sm:0 4px 8px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.07), inset 0 -2px 3px rgba(0,0,0,.22);
+    --clay-press:0 2px 4px rgba(0,0,0,.4), inset 0 2px 5px rgba(0,0,0,.3);
+  }
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;}
-body{ background:linear-gradient(180deg,var(--bg),var(--bg2)); color:var(--ink);
+body{ background:linear-gradient(180deg,var(--bg),var(--bg-deep)); color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  min-height:100vh; }
-button{font-family:inherit; cursor:pointer; color:inherit;}
+  font-size:var(--fs-body); line-height:1.5; min-height:100vh; }
+button{ font-family:inherit; cursor:pointer; color:inherit;
+  transition:transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out, border-color .2s ease-out, opacity .2s ease-out; }
+button:active{ transform:scale(.97); box-shadow:var(--clay-press); }
+button:focus-visible{ outline:3px solid var(--accent-dark); outline-offset:2px; }
+h3{ font-size:var(--fs-card); font-weight:600; }
 /* ---------- top bar ---------- */
-.topbar{ position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:8px;
-  padding:5px 10px; background:var(--card); border-bottom:2px solid var(--line); }
-.pill{ display:inline-flex; align-items:center; gap:4px; font-weight:800; font-size:13.5px;
-  background:var(--fill); border:2px solid var(--line); border-radius:999px; padding:3px 10px; }
-.pill.streak{ background:var(--goldbg); border-color:var(--yellow); }
+.topbar{ position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:var(--sp-2);
+  padding:var(--sp-2) var(--sp-3); background:var(--surface); border-bottom:2px solid var(--border); }
+.pill{ display:inline-flex; align-items:center; gap:var(--sp-1); min-height:32px;
+  font-size:var(--fs-note); font-weight:700;
+  background:var(--fill); border:2px solid var(--border); border-radius:var(--r-pill); padding:var(--sp-1) var(--sp-3); }
+.pill.streak{ background:var(--accent-bg); border-color:var(--accent); }
 .topbar .sp{flex:1;}
-.sfxbtn{ font-size:12.5px; font-weight:700; border:2px solid var(--line); background:var(--panel);
-  border-radius:999px; padding:4px 10px; }
+.sfxbtn{ position:relative; min-height:32px; font-size:var(--fs-tag); font-weight:700;
+  border:2px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm);
+  border-radius:var(--r-pill); padding:var(--sp-1) var(--sp-3); }
+.sfxbtn::after{ content:""; position:absolute; inset:-6px -2px; } /* hit area ≥44px tall */
 .sfxbtn.off{ opacity:.55; }
 /* ---------- tabs ---------- */
-.tabs{ display:flex; flex-wrap:wrap; gap:6px; padding:7px 10px 3px; max-width:1060px; margin:0 auto; }
-.tab{ flex:1 1 30%; min-width:90px; border:2px solid var(--line); background:var(--panel);
-  border-radius:11px; padding:9px 3px; font-size:13px; font-weight:800; }
-.tab.on{ background:var(--green); border-color:var(--green); color:#fff; }
-.tab .tic{ font-size:.75em; }
-main{ max-width:1060px; margin:0 auto; padding:10px 12px 46px; }
+.tabs{ display:flex; flex-wrap:wrap; gap:var(--sp-2); padding:var(--sp-3) var(--sp-4) var(--sp-1); max-width:1060px; margin:0 auto; }
+.tab{ flex:1 1 30%; min-width:96px; min-height:44px; display:flex; align-items:center; justify-content:center; gap:var(--sp-1);
+  border:2.5px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm);
+  border-radius:var(--r-md); padding:var(--sp-2) var(--sp-1); font-size:var(--fs-note); font-weight:700; color:var(--muted); }
+.tab.on{ background:var(--primary); border-color:var(--primary); color:#fff; font-weight:800; box-shadow:var(--clay-sm); }
+.tab .tic{ font-size:1em; }
+main{ max-width:1060px; margin:0 auto; padding:var(--sp-4) var(--sp-4) 48px; }
 section.page{ display:none; }
 section.page.on{ display:block; }
-h2.sec{ font-size:18px; margin:6px 2px 3px; }
-p.sub{ color:var(--ink2); margin:2px 2px 10px; font-size:13px; }
+h2.sec{ font-size:var(--fs-title); font-weight:700; margin:var(--sp-1) 0 var(--sp-1); }
+p.sub{ color:var(--muted); margin:0 0 var(--sp-4); font-size:var(--fs-note); }
 /* ---------- cards & options ---------- */
-.wcard{ display:flex; gap:11px; align-items:center; background:var(--card); border:2px solid var(--line);
-  border-radius:16px; padding:9px; margin:0 0 9px; box-shadow:var(--shadow); text-align:left; width:100%; }
-.wcard img{ width:96px; height:80px; object-fit:cover; border-radius:10px; flex:0 0 auto; background:#fff; }
-.wcard .w{ font-size:21px; font-weight:900; }
-.wcard .zh{ font-size:13.5px; color:var(--ink2); font-weight:700; }
-.wcard .ex{ font-size:13px; color:var(--ink2); margin-top:2px; }
-.wcard.playing{ border-color:var(--gold); background:var(--goldbg); }
-.spk{ font-size:17px; }
-.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.wcard{ display:flex; gap:var(--sp-3); align-items:center; background:var(--surface); border:2.5px solid var(--border);
+  border-radius:var(--r-lg); padding:var(--sp-3); margin:0 0 var(--sp-3); box-shadow:var(--clay); text-align:left; width:100%; }
+.wcard img{ width:96px; height:80px; object-fit:cover; border-radius:var(--r-sm); flex:0 0 auto; background:#fff; }
+.wcard .w{ font-size:var(--fs-title); font-weight:800; }
+.wcard .zh{ font-size:var(--fs-note); color:var(--muted); font-weight:700; }
+.wcard .ex{ font-size:var(--fs-note); color:var(--muted); margin-top:var(--sp-1); }
+.wcard.playing{ border-color:var(--accent-dark); background:var(--accent-bg); }
+.spk{ font-size:var(--icon); }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); }
 @media (max-width:560px){ .grid2{ grid-template-columns:1fr; } .wcard img{ width:84px; height:70px; } }
-.qcard{ background:var(--card); border:2px solid var(--line); border-radius:16px; padding:11px; margin:0 0 11px; box-shadow:var(--shadow); }
-.qcard h3{ margin:0 0 3px; font-size:15.5px; }
-.qcard .qsub{ color:var(--ink2); font-size:12.5px; margin:0 0 8px; }
-.qitem{ padding:8px 0; border-top:1.5px dashed var(--line); }
+.qcard{ background:var(--surface); border:2.5px solid var(--border); border-radius:var(--r-lg);
+  padding:var(--sp-4); margin:0 0 var(--sp-4); box-shadow:var(--clay); }
+.qcard h3{ margin:0 0 var(--sp-1); font-size:var(--fs-card); font-weight:600; }
+.qcard .qsub{ color:var(--muted); font-size:var(--fs-note); margin:0 0 var(--sp-2); }
+.qitem{ padding:var(--sp-3) 0 var(--sp-1); border-top:1.5px dashed var(--border); }
 .qitem:first-of-type{ border-top:none; }
-.stem{ font-size:17px; font-weight:700; margin:3px 0 8px; line-height:1.5; }
-.stem .blank{ display:inline-block; min-width:52px; border-bottom:3px solid var(--green); text-align:center; color:var(--green-d); }
-.opts{ display:flex; flex-wrap:nowrap; gap:8px; }
+.stem{ font-size:var(--fs-body); font-weight:600; margin:var(--sp-1) 0 var(--sp-2); line-height:1.6; }
+.stem .blank{ display:inline-block; min-width:52px; border-bottom:3px solid var(--primary); text-align:center; color:var(--primary-dark); }
+.opts{ display:flex; flex-wrap:nowrap; gap:var(--sp-2); }
 .opts .opt{ flex:1 1 0; min-width:0; white-space:nowrap; }
 .opts.col{ flex-direction:column; }
-.opts.col .opt{ flex:0 0 auto; text-align:left; white-space:normal; }
-.opt{ border:2.5px solid var(--line); background:var(--panel); border-radius:12px; padding:8px 13px;
-  font-size:16px; font-weight:800; }
+.opts.col .opt{ flex:0 0 auto; text-align:left; justify-content:flex-start; white-space:normal; }
+.opt{ display:flex; align-items:center; justify-content:center; min-height:44px;
+  border:2.5px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm);
+  border-radius:var(--r-md); padding:var(--sp-2) var(--sp-3);
+  font-size:var(--fs-body); font-weight:700; }
 @media (max-width:560px){
-  .opts:not(.col) .opt, .fv-wordbtns .opt{ font-size:11.5px; padding:8px 4px; }
-  .fv-circ{ font-size:12px; }
+  .opts:not(.col) .opt, .fv-wordbtns .opt{ font-size:var(--fs-tag); padding:var(--sp-2) var(--sp-1); }
+  .fv-circ{ font-size:12.5px; }
 }
-.opt:active{ transform:scale(.97); }
-.opt.wrong{ opacity:.38; border-color:var(--bad); pointer-events:none; }
-.opt.right{ background:var(--green); border-color:var(--green); color:#fff; pointer-events:none; }
-.opt.playing{ border-color:var(--gold); }
-.feedback{ font-size:14.5px; font-weight:800; margin-top:7px; min-height:20px; }
-.feedback.good{ color:var(--green-d); } .feedback.bad{ color:var(--coral); }
-.bigplay{ display:inline-flex; align-items:center; gap:7px; background:var(--green); color:#fff; border:none;
-  border-radius:999px; padding:9px 18px; font-size:15.5px; font-weight:900; }
-.bigplay.playing{ background:var(--gold); color:#5a3d00; }
-.imgopts{ display:flex; gap:10px; flex-wrap:nowrap; }
-.imgopt{ border:3px solid var(--line); background:#fff; border-radius:14px; padding:6px; flex:1 1 0; min-width:0; max-width:230px; }
-.imgopt img{ width:100%; height:auto; aspect-ratio:118/96; object-fit:cover; border-radius:9px; display:block; }
-.imgopt.wrong{ opacity:.35; border-color:var(--bad); pointer-events:none; }
-.imgopt.right{ border-color:var(--green); box-shadow:0 0 0 3px var(--fill); pointer-events:none; }
+.opt.wrong{ opacity:.38; border-color:var(--danger-soft); pointer-events:none; }
+.opt.right{ background:var(--primary); border-color:var(--primary); color:#fff; pointer-events:none; }
+.opt.playing{ border-color:var(--accent-dark); }
+.feedback{ font-size:var(--fs-note); font-weight:700; margin-top:var(--sp-2); min-height:20px; }
+.feedback.good{ color:var(--primary-dark); } .feedback.bad{ color:var(--danger-text); }
+.bigplay{ display:inline-flex; align-items:center; gap:var(--sp-2); min-height:48px;
+  background:var(--primary); color:#fff; border:none; box-shadow:var(--clay-sm);
+  border-radius:var(--r-pill); padding:var(--sp-3) var(--sp-6); font-size:var(--fs-card); font-weight:800; }
+.bigplay.playing{ background:var(--accent-dark); color:#5a3d00; }
+.imgopts{ display:flex; gap:var(--sp-3); flex-wrap:nowrap; }
+.imgopt{ border:3px solid var(--border); background:#fff; border-radius:var(--r-md); box-shadow:var(--clay-sm);
+  padding:var(--sp-2); flex:1 1 0; min-width:0; max-width:230px; }
+.imgopt img{ width:100%; height:auto; aspect-ratio:118/96; object-fit:cover; border-radius:var(--r-sm); display:block; }
+.imgopt.wrong{ opacity:.35; border-color:var(--danger-soft); pointer-events:none; }
+.imgopt.right{ border-color:var(--primary); box-shadow:0 0 0 3px var(--fill), var(--clay-sm); pointer-events:none; }
 .shapebox{ display:inline-flex; align-items:center; justify-content:center; background:#fff; overflow:hidden; }
 .shapebox svg{ width:74%; height:74%; display:block; }
-.imgopt .shapebox{ width:100%; height:auto; aspect-ratio:118/96; border-radius:9px; }
-.wcard .shapebox{ width:96px; height:80px; border-radius:10px; flex:0 0 auto; }
-.vp-big img{ width:190px; height:150px; object-fit:cover; border-radius:12px; border:2.5px solid var(--line); background:#fff; }
-.vp-big .shapebox{ width:190px; height:150px; border-radius:12px; border:2.5px solid var(--line); }
-.fv-img .shapebox{ width:100%; height:auto; aspect-ratio:104/86; border-radius:9px; }
+.imgopt .shapebox{ width:100%; height:auto; aspect-ratio:118/96; border-radius:var(--r-sm); }
+.wcard .shapebox{ width:96px; height:80px; border-radius:var(--r-sm); flex:0 0 auto; }
+.vp-big img{ width:190px; height:150px; object-fit:cover; border-radius:var(--r-md); border:2.5px solid var(--border); background:#fff; }
+.vp-big .shapebox{ width:190px; height:150px; border-radius:var(--r-md); border:2.5px solid var(--border); }
+.fv-img .shapebox{ width:100%; height:auto; aspect-ratio:104/86; border-radius:var(--r-sm); }
 .fv-circ .shapebox{ width:100%; height:100%; border-radius:50%; }
-.fv-bigimg .shapebox{ width:min(300px,78vw); height:220px; border-radius:16px; border:3px solid var(--line); margin:0 auto; }
+.fv-bigimg .shapebox{ width:min(300px,78vw); height:220px; border-radius:var(--r-md); border:3px solid var(--border); margin:0 auto; }
 @media (max-width:560px){ .wcard .shapebox{ width:84px; height:70px; } }
-.progress{ font-weight:800; color:var(--ink2); margin:5px 2px 8px; font-size:13.5px; }
-.donebox{ text-align:center; padding:22px 10px; }
-.donebox .big{ font-size:26px; font-weight:900; margin-bottom:6px; }
-.again{ background:var(--green); color:#fff; border:none; border-radius:999px; padding:9px 22px; font-size:15px; font-weight:900; }
+.progress{ font-weight:500; color:var(--muted); margin:var(--sp-1) 0 var(--sp-2); font-size:var(--fs-tag); }
+.donebox{ text-align:center; padding:var(--sp-6) var(--sp-4); }
+.donebox .big{ font-size:24px; font-weight:800; margin-bottom:var(--sp-2); }
+.again{ background:var(--primary); color:#fff; border:none; box-shadow:var(--clay-sm); min-height:44px;
+  border-radius:var(--r-pill); padding:var(--sp-3) var(--sp-6); font-size:var(--fs-body); font-weight:800; }
 /* sentences */
-.sentimg{ width:100%; max-height:230px; object-fit:cover; border-radius:14px; margin:0 0 10px; border:2px solid var(--line); }
-.sentrow{ display:flex; align-items:flex-start; gap:8px; background:var(--card); border:2px solid var(--line);
-  border-radius:14px; padding:8px 10px; margin:0 0 8px; }
+.sentimg{ width:100%; max-height:230px; object-fit:cover; border-radius:var(--r-md); margin:0 0 var(--sp-3); border:2px solid var(--border); }
+.sentrow{ display:flex; align-items:flex-start; gap:var(--sp-2); background:var(--surface); border:2.5px solid var(--border);
+  border-radius:var(--r-md); box-shadow:var(--clay-sm); padding:var(--sp-3); margin:0 0 var(--sp-2); }
 .sentrow .phrases{ flex:1; line-height:2.15; }
-.phr{ display:inline-block; border:2px solid var(--line); background:var(--panel); border-radius:10px;
-  padding:2px 8px; margin:2px 3px; font-size:16.5px; font-weight:700; }
-.phr.playing{ border-color:var(--gold); background:var(--goldbg); }
-.wholebtn{ flex:0 0 auto; border:none; background:var(--fill); border:2px solid var(--line); width:40px; height:40px;
-  border-radius:50%; font-size:17px; }
-.wholebtn.playing{ background:var(--gold); }
-.tfbtns{ display:flex; gap:10px; }
-.tfbtn{ flex:1; border:2.5px solid var(--line); background:var(--panel); border-radius:12px; padding:9px; font-size:16.5px; font-weight:900; }
+.phr{ display:inline-flex; align-items:center; min-height:44px; border:2.5px solid var(--border); background:var(--panel);
+  box-shadow:var(--clay-sm); border-radius:var(--r-sm);
+  padding:var(--sp-1) var(--sp-3); margin:var(--sp-1); font-size:var(--fs-card); font-weight:700; }
+.phr.playing{ border-color:var(--accent-dark); background:var(--accent-bg); }
+.wholebtn{ flex:0 0 auto; border:2px solid var(--border); background:var(--fill); width:44px; height:44px;
+  border-radius:50%; font-size:var(--icon); }
+.wholebtn.playing{ background:var(--accent); }
+.tfbtns{ display:flex; gap:var(--sp-3); }
+.tfbtn{ flex:1; min-height:48px; border:2.5px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm);
+  border-radius:var(--r-md); padding:var(--sp-2); font-size:var(--fs-card); font-weight:800; }
 /* phrase order */
-.pool{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.pool{ display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-3); }
 .pool .phr{ cursor:pointer; }
 .pool .phr.used{ opacity:.3; pointer-events:none; }
-.answerline{ min-height:42px; border:2px dashed var(--line); border-radius:12px; padding:5px 9px;
-  font-size:17px; font-weight:800; background:var(--panel); }
-.answerline .phr{ background:var(--yellow); border-color:var(--gold); }
+.answerline{ min-height:48px; border:2px dashed var(--border); border-radius:var(--r-sm); padding:var(--sp-2) var(--sp-3);
+  font-size:var(--fs-card); font-weight:700; background:var(--panel); }
+.answerline .phr{ background:var(--accent); border-color:var(--accent-dark); min-height:0; box-shadow:none; }
 @keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 .shake{ animation:shake .3s ease 2; }
 /* pronoun table */
-table.pro{ width:100%; border-collapse:collapse; font-size:16px; }
-table.pro th, table.pro td{ border:1.5px solid var(--line); padding:7px 5px; text-align:center; }
-table.pro th{ background:var(--fill); }
+table.pro{ width:100%; border-collapse:collapse; font-size:var(--fs-body); }
+table.pro th, table.pro td{ border:1.5px solid var(--border); padding:var(--sp-3) var(--sp-2); text-align:center; }
+table.pro th{ background:var(--fill); font-weight:600; }
 table.pro tr.prow{ cursor:pointer; }
-table.pro tr.prow.playing td{ background:var(--goldbg); }
-.chiprow{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+table.pro tr.prow.playing td{ background:var(--accent-bg); }
+.chiprow{ display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-3); align-items:center; }
 /* phonics */
-.oe{ color:#E07B1F; font-weight:900; }
-.phontab{ display:flex; flex-wrap:wrap; gap:8px; }
-.phonchip{ border:2.5px solid var(--line); background:var(--panel); border-radius:12px; padding:8px 12px; font-size:16.5px; font-weight:800; }
-.phonchip small{ color:var(--ink2); font-weight:700; }
-.phonchip.picked{ background:var(--yellow); border-color:var(--gold); }
-.phonchip.badpick{ background:var(--bad); border-color:var(--coral); }
-.phonchip.playing{ border-color:var(--gold); }
+.oe{ color:#B85E0B; font-weight:900; }
+.phontab{ display:flex; flex-wrap:wrap; gap:var(--sp-2); }
+.phonchip{ min-height:44px; border:2.5px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm);
+  border-radius:var(--r-sm); padding:var(--sp-2) var(--sp-3); font-size:var(--fs-card); font-weight:700; }
+.phonchip small{ color:var(--muted); font-weight:700; }
+.phonchip.picked{ background:var(--accent); border-color:var(--accent-dark); }
+.phonchip.badpick{ background:var(--danger-soft); border-color:var(--danger); }
+.phonchip.playing{ border-color:var(--accent-dark); }
 /* ---------- Fast Vocab ---------- */
 .fv-wrap{ position:relative; }
-.fv-menu{ text-align:center; padding:18px 8px; }
-.fv-menu h3{ font-size:23px; margin:4px 0; }
-.startbtn{ background:var(--green); color:#fff; border:none; border-radius:999px; padding:11px 36px;
-  font-size:19px; font-weight:900; margin:8px 4px; box-shadow:var(--shadow); }
-.ghostbtn{ background:var(--panel); border:2.5px solid var(--line); border-radius:999px; padding:9px 22px; font-size:15px; font-weight:800; margin:6px 4px; }
-.backarrow{ position:absolute; left:0; top:0; width:40px; height:40px; border-radius:50%; border:2.5px solid var(--line);
-  background:var(--panel); font-size:19px; font-weight:900; z-index:5; }
-.fv-hud{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin:0 0 9px 50px; font-weight:900; font-size:15px; }
+.fv-menu{ text-align:center; padding:var(--sp-6) var(--sp-2); }
+.fv-menu h3{ font-size:var(--fs-title); font-weight:700; margin:var(--sp-1) 0; }
+.startbtn{ background:var(--primary); color:#fff; border:none; border-radius:var(--r-pill); min-height:52px;
+  padding:var(--sp-3) var(--sp-8); font-size:18px; font-weight:800; margin:var(--sp-2) var(--sp-1); box-shadow:var(--clay); }
+.ghostbtn{ background:var(--panel); border:2.5px solid var(--border); box-shadow:var(--clay-sm); min-height:44px;
+  border-radius:var(--r-pill); padding:var(--sp-2) var(--sp-6); font-size:var(--fs-body); font-weight:700; margin:var(--sp-2) var(--sp-1); }
+.backarrow{ position:absolute; left:0; top:0; width:44px; height:44px; border-radius:50%; border:2.5px solid var(--border);
+  background:var(--panel); box-shadow:var(--clay-sm); font-size:18px; font-weight:800; z-index:5; }
+.fv-hud{ display:flex; align-items:center; gap:var(--sp-2); flex-wrap:wrap; margin:0 0 var(--sp-3) 52px; font-weight:700; font-size:var(--fs-note); }
 .energy{ display:inline-flex; gap:3px; }
-.energy i{ width:17px; height:24px; border-radius:5px; background:var(--line); display:inline-block; }
-.energy i.on{ background:var(--green); }
-.fv-gold .energy i.on{ background:var(--gold); }
-.fv-gold .fv-stage{ border-color:var(--gold); background:var(--goldbg);
-  box-shadow:0 0 0 3px var(--yellow), 0 0 26px rgba(233,168,32,.55); }
-.fv-gold .fv-hud{ color:var(--gold); }
-.fv-gold .backarrow{ border-color:var(--gold); box-shadow:0 0 12px rgba(233,168,32,.5); }
+.energy i{ width:16px; height:24px; border-radius:6px; background:var(--border); display:inline-block; }
+.energy i.on{ background:var(--primary); }
+.fv-gold .energy i.on{ background:var(--accent-dark); }
+.fv-gold .fv-stage{ border-color:var(--accent-dark); background:var(--accent-bg);
+  box-shadow:0 0 0 3px var(--accent), 0 0 26px rgba(233,168,32,.55); }
+.fv-gold .fv-hud{ color:var(--accent-text); }
+.fv-gold .backarrow{ border-color:var(--accent-dark); box-shadow:0 0 12px rgba(233,168,32,.5); }
 .fv-stage{ transition:transform .2s ease, opacity .2s ease; }
 .fv-stage.fv-out{ transform:translateY(-16px); opacity:0; }
 .fv-stage.fv-in{ animation:fvIn .3s ease; }
 @keyframes fvIn{ from{ transform:translateY(28px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
-.fv-fly{ position:fixed; z-index:200; pointer-events:none; background:#fff; border:3px solid var(--green);
-  border-radius:12px; overflow:hidden; box-shadow:var(--shadow);
+.fv-fly{ position:fixed; z-index:200; pointer-events:none; background:#fff; border:3px solid var(--primary);
+  border-radius:var(--r-sm); overflow:hidden; box-shadow:var(--clay);
   transition:transform .3s cubic-bezier(.34,1.45,.64,1); }
 .fv-fly img{ width:100%; height:100%; object-fit:cover; display:block; }
 .fv-fly .shapebox{ width:100%; height:100%; }
@@ -174,33 +238,37 @@ table.pro tr.prow.playing td{ background:var(--goldbg); }
 @media (prefers-reduced-motion: reduce){
   .fv-stage.fv-in, .finalstars span{ animation:none; }
   .fv-fly{ transition:none; }
+  button:active{ transform:none; }
+  .shake{ animation:none; }
 }
 .ringwrap{ position:relative; width:46px; height:46px; }
 .ringwrap svg{ transform:rotate(-90deg); }
-.ringwrap .n{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:14.5px; font-weight:900; }
-.fv-stage{ border:2.5px solid var(--line); border-radius:16px; background:var(--card); padding:11px; }
-.fv-imgs{ display:flex; gap:10px; flex-wrap:nowrap; justify-content:center; margin-bottom:14px; }
-.fv-img{ border:3.5px solid var(--line); background:#fff; border-radius:14px; padding:5px; flex:1 1 0; min-width:0; max-width:170px; }
-.fv-img img{ width:100%; height:auto; aspect-ratio:104/86; object-fit:cover; border-radius:9px; display:block; }
-.fv-img.sel{ border-color:var(--gold); box-shadow:0 0 0 3px var(--yellow); }
-.fv-img.locked{ border-color:var(--green); opacity:.35; }
-.fv-circles{ display:flex; gap:12px; flex-wrap:nowrap; justify-content:center; }
-.fv-circ{ flex:1 1 0; min-width:0; max-width:104px; aspect-ratio:1/1; border-radius:50%; border:3.5px dashed var(--green); background:var(--panel);
-  font-size:15.5px; font-weight:900; display:flex; align-items:center; justify-content:center; text-align:center; padding:6px; overflow:hidden; }
+.ringwrap .n{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:var(--fs-note); font-weight:800; }
+.fv-stage{ border:2.5px solid var(--border); border-radius:var(--r-lg); background:var(--surface); box-shadow:var(--clay); padding:var(--sp-4); }
+.fv-imgs{ display:flex; gap:var(--sp-3); flex-wrap:nowrap; justify-content:center; margin-bottom:var(--sp-4); }
+.fv-img{ border:3.5px solid var(--border); background:#fff; border-radius:var(--r-md); box-shadow:var(--clay-sm); padding:var(--sp-1); flex:1 1 0; min-width:0; max-width:170px; }
+.fv-img img{ width:100%; height:auto; aspect-ratio:104/86; object-fit:cover; border-radius:var(--r-sm); display:block; }
+.fv-img.sel{ border-color:var(--accent-dark); box-shadow:0 0 0 3px var(--accent); }
+.fv-img.locked{ border-color:var(--primary); opacity:.35; }
+.fv-circles{ display:flex; gap:var(--sp-3); flex-wrap:nowrap; justify-content:center; }
+.fv-circ{ flex:1 1 0; min-width:0; max-width:104px; aspect-ratio:1/1; border-radius:50%; border:3.5px dashed var(--primary); background:var(--panel);
+  box-shadow:inset 0 2px 5px rgba(35,68,52,.10);
+  font-size:var(--fs-body); font-weight:800; display:flex; align-items:center; justify-content:center; text-align:center; padding:var(--sp-2); overflow:hidden; }
 .fv-circ img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
-.fv-circ.filled{ border-style:solid; border-color:var(--green); padding:0; }
-.fv-circ.flash{ border-color:var(--coral); background:#fdeceb; }
+.fv-circ.filled{ border-style:solid; border-color:var(--primary); padding:0; }
+.fv-circ.flash{ border-color:var(--danger); background:#fdeceb; }
 .fv-bigimg{ text-align:center; }
-.fv-bigimg img{ width:min(300px,78vw); height:220px; object-fit:cover; border-radius:16px; border:3px solid var(--line); background:#fff; }
-.fv-wordbtns{ display:flex; gap:10px; justify-content:center; flex-wrap:nowrap; margin-top:14px; }
+.fv-bigimg img{ width:min(300px,78vw); height:220px; object-fit:cover; border-radius:var(--r-md); border:3px solid var(--border); background:#fff; }
+.fv-wordbtns{ display:flex; gap:var(--sp-3); justify-content:center; flex-wrap:nowrap; margin-top:var(--sp-4); }
 .fv-wordbtns .opt{ flex:1 1 0; min-width:0; max-width:230px; white-space:nowrap; }
-.finalstars{ font-size:36px; letter-spacing:6px; }
-.finalstars span{ color:var(--yellow); }
+.finalstars{ font-size:34px; letter-spacing:4px; }
+.finalstars span{ color:var(--accent); }
 .finalstars .off{ opacity:.25; }
-.starglyph{ color:var(--yellow); }
-#starPill .starglyph{ font-size:10.5px; }
-.toolbtn{ border:2.5px solid var(--line); background:var(--panel); border-radius:999px; padding:7px 14px; font-size:14px; font-weight:800; }
-.toolbtn.on{ background:var(--green); color:#fff; border-color:var(--green); }
+.starglyph{ color:var(--accent); font-size:1em; }
+.toolbtn{ border:2.5px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm); min-height:44px;
+  border-radius:var(--r-pill); padding:var(--sp-2) var(--sp-4); font-size:var(--fs-note); font-weight:700; }
+.toolbtn.on{ background:var(--primary); color:#fff; border-color:var(--primary); }
+.toolbtn:disabled{ opacity:.45; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -220,6 +288,7 @@ var IMG = {"crop-plane":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPUAAAC+C
 var NORA = {"EXERCISES":[{"mount":"ex1","badge":"练习 1","type":"fill","title":"选一选：Do 还是 Does？","sub":"读一读句子，选对的词填进空格。","items":[{"disp":"___ I like cars?","full":"Do I like cars?","opts":["Do","Does"],"ans":"Do","key":"g2-t1-i"},{"disp":"___ you like cars?","full":"Do you like cars?","opts":["Do","Does"],"ans":"Do","key":"g2-t1-you"},{"disp":"___ we like cars?","full":"Do we like cars?","opts":["Do","Does"],"ans":"Do","key":"g2-t1-we"},{"disp":"___ they like cars?","full":"Do they like cars?","opts":["Do","Does"],"ans":"Do","key":"g2-t1-they"},{"disp":"___ he like cars?","full":"Does he like cars?","opts":["Do","Does"],"ans":"Does","key":"g2-t1-he"},{"disp":"___ she like cars?","full":"Does she like cars?","opts":["Do","Does"],"ans":"Does","key":"g2-t1-she"},{"disp":"___ it like cars?","full":"Does it like cars?","opts":["Do","Does"],"ans":"Does","key":"g2-t1-it"}]},{"mount":"ex2","badge":"练习 2","type":"fill","title":"简短回答：哪个对？","sub":"读一读问题，选对的简短回答。","items":[{"disp":"Do you like cars?","full":"Do you like cars? Yes, I do.","opts":["Yes, I do.","Yes, I does."],"ans":"Yes, I do.","key":"g2-t1-you"},{"disp":"Does he like cars?","full":"Does he like cars? Yes, he does.","opts":["Yes, he does.","Yes, he do."],"ans":"Yes, he does.","key":"g2-t1-he"},{"disp":"Do they like cars?","full":"Do they like cars? No, they don't.","opts":["No, they don't.","No, they doesn't."],"ans":"No, they don't.","key":"g2-t1-they"},{"disp":"Does she like cars?","full":"Does she like cars? No, she doesn't.","opts":["No, she doesn't.","No, she don't."],"ans":"No, she doesn't.","key":"g2-t1-she"},{"disp":"Does it like cars?","full":"Does it like cars? Yes, it does.","opts":["Yes, it does.","Yes, it do."],"ans":"Yes, it does.","key":"g2-t1-it"},{"disp":"Do we like cars?","full":"Do we like cars? No, we don't.","opts":["No, we don't.","No, we doesn't."],"ans":"No, we don't.","key":"g2-t1-we"}]},{"mount":"ex3","badge":"练习 3","type":"fill","title":"What 问句：do 还是 does？","sub":"读一读问句，选对的词。","items":[{"disp":"What ___ you want?","full":"What do you want?","opts":["do","does"],"ans":"do","key":"g2-wt-you"},{"disp":"What ___ he want?","full":"What does he want?","opts":["do","does"],"ans":"does","key":"g2-wt-he"},{"disp":"What ___ they want?","full":"What do they want?","opts":["do","does"],"ans":"do","key":"g2-wt-they"},{"disp":"What ___ she want?","full":"What does she want?","opts":["do","does"],"ans":"does","key":"g2-wt-she"}]},{"mount":"ex4","badge":"练习 4","type":"fill","title":"want 还是 wants？","sub":"读一读句子，选对的词。记住：he / she / it 后面用 wants。","items":[{"disp":"He ___ a teddy.","full":"He wants a teddy.","opts":["want","wants"],"ans":"wants","key":"g2-wt-he"},{"disp":"She ___ a teddy.","full":"She wants a teddy.","opts":["want","wants"],"ans":"wants","key":"g2-wt-she"},{"disp":"It ___ a teddy.","full":"It wants a teddy.","opts":["want","wants"],"ans":"wants","key":"g2-wt-it"},{"disp":"They ___ a teddy.","full":"They want a teddy.","opts":["want","wants"],"ans":"want","key":"g2-wt-they"},{"disp":"I ___ a teddy.","full":"I want a teddy.","opts":["want","wants"],"ans":"want","key":"g2-wt-i"}]},{"mount":"ex5","badge":"练习 5","type":"fill","title":"看题选答：看问题，选回答","sub":"读一读问题，选主语和 do / does 都对得上的简短回答。","items":[{"disp":"Does he like cars?","full":"Does he like cars? Yes, he does.","opts":["Yes, he does.","Yes, she does.","Yes, they do."],"ans":"Yes, he does.","key":"g2-t1-he"},{"disp":"Does she like cars?","full":"Does she like cars? Yes, she does.","opts":["Yes, she does.","Yes, he does.","Yes, it does."],"ans":"Yes, she does.","key":"g2-t1-she"},{"disp":"Do they like cars?","full":"Do they like cars? Yes, they do.","opts":["Yes, they do.","Yes, we do.","Yes, you do."],"ans":"Yes, they do.","key":"g2-t1-they"},{"disp":"Do you like cars?","full":"Do you like cars? Yes, I do.","opts":["Yes, I do.","Yes, you do.","Yes, we do."],"ans":"Yes, I do.","key":"g2-t1-you"},{"disp":"Does it like cars?","full":"Does it like cars? Yes, it does.","opts":["Yes, it does.","Yes, he does.","Yes, she does."],"ans":"Yes, it does.","key":"g2-t1-it"},{"disp":"Does he want a teddy?","full":"Does he want a teddy? Yes, he does.","opts":["Yes, he does.","No, she doesn't.","Yes, they do."],"ans":"Yes, he does.","key":"g2-gracie-1"}]},{"mount":"ex6","badge":"练习 6","type":"pick","title":"选出正确的句子","sub":"读一读，从三个句子里选出正确的那一个。","items":[{"full":"Does he want a teddy?","say":"Does he want a teddy? Yes, he does. No, he doesn't.","opts":["Does he want a teddy?","Does he wants a teddy?","He does want a teddy?"],"ans":"Does he want a teddy?","key":"g2-gracie-1"},{"full":"Do they like cars?","say":"Do they like cars? Yes, they do. No, they don't.","opts":["Do they like cars?","Does they like cars?","Do they likes cars?"],"ans":"Do they like cars?","key":"g2-t1-they"},{"full":"What does she want?","say":"What does she want? She wants a teddy.","opts":["What does she want?","What do she want?","What does she wants?"],"ans":"What does she want?","key":"g2-wt-she"},{"full":"He wants a helicopter.","say":"What does he want? He wants a helicopter.","opts":["He wants a helicopter.","He want a helicopter.","He wanting a helicopter."],"ans":"He wants a helicopter.","key":"g2-gracie-2"},{"full":"Yes, she does.","say":"Does she like cars? Yes, she does. No, she doesn't.","opts":["Yes, she does.","Yes, she do.","Yes, she is."],"ans":"Yes, she does.","key":"g2-t1-she"},{"full":"No, they don't.","say":"Do they like cars? Yes, they do. No, they don't.","opts":["No, they don't.","No, they doesn't.","No, they not."],"ans":"No, they don't.","key":"g2-t1-they"}]},{"mount":"ex7","badge":"练习 7","type":"order","title":"组句排序：拼出正确的句子","sub":"点下面的词块，按顺序把句子拼出来。拼错了可以点已选的词把它拿回去。","items":[{"words":["Does","he","want","a","teddy","?"],"full":"Does he want a teddy?","say":"Does he want a teddy? Yes, he does. No, he doesn't.","key":"g2-gracie-1"},{"words":["What","does","she","want","?"],"full":"What does she want?","say":"What does she want? She wants a teddy.","key":"g2-wt-she"},{"words":["He","wants","a","helicopter","."],"full":"He wants a helicopter.","say":"What does he want? He wants a helicopter.","key":"g2-gracie-2"},{"words":["Do","they","like","cars","?"],"full":"Do they like cars?","say":"Do they like cars? Yes, they do. No, they don't.","key":"g2-t1-they"},{"words":["Yes,","she","does","."],"full":"Yes, she does.","say":"Does she like cars? Yes, she does. No, she doesn't.","key":"g2-t1-she"}]}],"PRO_TABLE":[{"zh":"我","s":"I","o":"me","p":"my","key":"pr-1"},{"zh":"你；你们","s":"you","o":"you","p":"your","key":"pr-2"},{"zh":"他","s":"he","o":"him","p":"his","key":"pr-3"},{"zh":"她","s":"she","o":"her","p":"her","key":"pr-4"},{"zh":"它","s":"it","o":"it","p":"its","key":"pr-5"},{"zh":"我们","s":"we","o":"us","p":"our","key":"pr-6"},{"zh":"他们；她们；它们","s":"they","o":"them","p":"their","key":"pr-7"}],"PRO21":[{"g":"I 组","stem":"___ like him.","opts":["I","me","my"],"ans":"I","key":"pro-i-like-him"},{"g":"I 组","stem":"She plays with ___.","opts":["I","me","my"],"ans":"me","key":"pro-she-plays-with-me"},{"g":"I 组","stem":"This is ___ robot.","opts":["I","me","my"],"ans":"my","key":"pro-this-is-my-robot"},{"g":"you 组","stem":"___ are my friend.","opts":["you","your","my"],"ans":"you","key":"be-you-are-my-friend"},{"g":"you 组","stem":"I like ___.","opts":["you","your","me"],"ans":"you","key":"pro-i-like-you"},{"g":"you 组","stem":"This is ___ book.","opts":["your","you","his"],"ans":"your","key":"pro-this-is-your-book"},{"g":"he 组","stem":"___ is a boy.","opts":["he","him","his"],"ans":"he","key":"be-he-is-a-boy"},{"g":"he 组","stem":"I like ___.","opts":["him","he","his"],"ans":"him","key":"pro-i-like-him"},{"g":"he 组","stem":"This is ___ kite.","opts":["his","him","he"],"ans":"his","key":"pro-this-is-his-kite"},{"g":"she 组","stem":"___ is Dora.","opts":["she","her","his"],"ans":"she","key":"be-she-is-dora"},{"g":"she 组","stem":"I like ___.","opts":["her","she","him"],"ans":"her","key":"pro-i-like-her"},{"g":"she 组","stem":"This is ___ doll.","opts":["her","she","his"],"ans":"her","key":"pro-this-is-her-doll"},{"g":"it 组","stem":"___ is a robot.","opts":["it","its","his"],"ans":"it","key":"be-it-is-a-robot"},{"g":"it 组","stem":"I like ___.","opts":["it","its","them"],"ans":"it","key":"pro-i-like-it"},{"g":"it 组","stem":"The dog is wagging ___ tail.","opts":["its","it","their"],"ans":"its","key":"pro-dog-wagging-its-tail"},{"g":"we 组","stem":"___ are twins.","opts":["we","us","our"],"ans":"we","key":"be-we-are-twins"},{"g":"we 组","stem":"She plays with ___.","opts":["us","we","our"],"ans":"us","key":"pro-she-plays-with-us"},{"g":"we 组","stem":"This is ___ classroom.","opts":["our","us","we"],"ans":"our","key":"pro-this-is-our-classroom"},{"g":"they 组","stem":"___ are happy.","opts":["they","them","their"],"ans":"they","key":"be-they-are-happy"},{"g":"they 组","stem":"I like ___.","opts":["them","they","their"],"ans":"them","key":"pro-i-like-them"},{"g":"they 组","stem":"This is ___ game.","opts":["their","them","they"],"ans":"their","key":"pro-this-is-their-game"}],"P3ITEMS":[{"hint":"a boy","ans":"He is a boy.","key":"pxw-1","img":null,"wrong":["She is a boy.","He are a boy."]},{"hint":"Nora's robot","ans":"It is her robot.","key":"pxw-2","img":"robot","wrong":["It is his robot.","It are her robot."]},{"hint":"Flora's robot","ans":"It is her robot.","key":"pxw-2","img":"red","wrong":["It is his robot.","She is her robot."]},{"hint":"Max's arm","ans":"His arm is long.","key":"pxw-4","img":"robot","wrong":["His arm are long.","Her arm is long."]},{"hint":"the two sisters","ans":"They are sisters.","key":"pxw-5","img":"scene1","wrong":["They is sisters.","She are sisters."]},{"hint":"a yellow car","ans":"It is a yellow car.","key":"pxw-6","img":"car","wrong":["It are a yellow car.","She is a yellow car."]}],"TFITEMS":[{"text":"Max is Flora's robot.","key":"stf-1","ans":false},{"text":"Max is Nora's robot.","key":"stf-2","ans":true},{"text":"Zak is a yellow robot.","key":"stf-3","ans":false},{"text":"Zak is Flora's favourite toy.","key":"stf-4","ans":true},{"text":"Dad wants the sisters to share their toys.","key":"st-1-3","ans":true},{"text":"Nora feels happy.","key":"stf-6","ans":false},{"text":"Nora wants a yellow car.","key":"stf-7","ans":false},{"text":"She wants her robot.","key":"sx-7","ans":true},{"text":"At first Nora and Flora are happy.","key":"stf-9","ans":true},{"text":"Flora's robot is called Max.","key":"stf-10","ans":false}],"OTHER_WORDS":[{"w":"went","ph":"/e/"},{"w":"looked","ph":"/ʊ/"},{"w":"said","ph":"/e/"},{"w":"help","ph":"/e/"},{"w":"had","ph":"/æ/"},{"w":"called","ph":"/ɔː/"},{"w":"mum","ph":"/ʌ/"},{"w":"warm","ph":"/ɔː/"},{"w":"thank","ph":"/æ/"}]};
 
 var READ_RATE = 0.7;
+var PRACTICE_RATE = 1.0;
 var WORDS35 = [
  {w:"robot", zh:"机器人", img:"crop-robot", aud:"sw-robot"},
  {w:"share", zh:"分享", img:"img10", aud:"sw-share"},
@@ -287,18 +356,19 @@ document.getElementById("starNum").textContent = stars; updStreak();
 /* ---------- audio engine ---------- */
 var curAudio = null, curBtn = null;
 function stopAudio(){ if(curAudio){ try{ curAudio.pause(); }catch(e){} curAudio = null; } if(curBtn){ curBtn.classList.remove("playing"); curBtn = null; } }
-function setRate(a){ try{ a.defaultPlaybackRate = READ_RATE; a.playbackRate = READ_RATE; }catch(e){} }
-function playAud(key, btn){
+function setRate(a, rate){ try{ a.defaultPlaybackRate = rate; a.playbackRate = rate; }catch(e){} }
+function playAud(key, btn, rate){
+  if(rate === undefined || rate === null) rate = PRACTICE_RATE;
   stopAudio();
   var src = AUD[key]; if(!src) return;
   var a = new Audio(src); curAudio = a;
   if(btn){ btn.classList.add("playing"); curBtn = btn; }
-  a.addEventListener("loadedmetadata", function(){ setRate(a); });
-  a.addEventListener("canplay", function(){ setRate(a); });
-  a.addEventListener("playing", function(){ setRate(a); });
-  a.addEventListener("timeupdate", function(){ setRate(a); });
+  a.addEventListener("loadedmetadata", function(){ setRate(a, rate); });
+  a.addEventListener("canplay", function(){ setRate(a, rate); });
+  a.addEventListener("playing", function(){ setRate(a, rate); });
+  a.addEventListener("timeupdate", function(){ setRate(a, rate); });
   a.addEventListener("ended", function(){ if(curBtn===btn && btn) btn.classList.remove("playing"); if(curAudio===a) curAudio=null; });
-  setRate(a);
+  setRate(a, rate);
   var p = a.play(); if(p && p.catch) p.catch(function(){ if(btn) btn.classList.remove("playing"); });
 }
 /* sfx: WebAudio beeps, normal speed, separate from pronunciation */
@@ -612,18 +682,18 @@ var GSENT21 = [
   NORA.PRO_TABLE.forEach(function(r){
     var tr = el("tr","prow");
     [r.zh, r.s, r.o, r.p].forEach(function(v){ tr.appendChild(el("td","",v)); });
-    tr.addEventListener("click", function(){ playAud(r.key, tr); });
+    tr.addEventListener("click", function(){ playAud(r.key, tr, READ_RATE); });
     tbl.appendChild(tr);
   });
   tc.appendChild(tbl);
   var rule = el("button","phr","📖 位置规则：主格在动词前；宾格在动词或介词后；形容词性物主代词放在名词前。");
   rule.style.marginTop = "10px";
-  rule.addEventListener("click", function(){ playAud("pr-rule", rule); });
+  rule.addEventListener("click", function(){ playAud("pr-rule", rule, READ_RATE); });
   tc.appendChild(rule);
   var exrow = el("div","chiprow");
   [["I like him.","pro-i-like-him"],["She plays with me.","pro-she-plays-with-me"],["This is my robot.","pro-this-is-my-robot"]].forEach(function(x){
     var b = el("button","phr","🔊 " + x[0]);
-    b.addEventListener("click", function(){ playAud(x[1], b); });
+    b.addEventListener("click", function(){ playAud(x[1], b, READ_RATE); });
     exrow.appendChild(b);
   });
   tc.appendChild(exrow);
@@ -828,7 +898,7 @@ var fvToMenu, fvState = null;
         var t = el("span"); t.appendChild(el("span","w", wd.w + " ")); t.appendChild(el("span","spk","🔊"));
         t.appendChild(document.createElement("br")); t.appendChild(el("span","zh", wd.zh));
         c.appendChild(t);
-        c.addEventListener("click", function(){ playAud(wd.aud, c); });
+        c.addEventListener("click", function(){ playAud(wd.aud, c, READ_RATE); });
         box.appendChild(c);
       });
       var nav = el("div","chiprow");
