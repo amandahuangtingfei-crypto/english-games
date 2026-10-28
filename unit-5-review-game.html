@@ -267,12 +267,13 @@ table.pro tr.prow.playing td{ background:var(--accent-bg); }
 .starglyph{ color:var(--accent); font-size:1em; }
 /* ---------- Whack-a-Mole ---------- */
 .confetti{ position:fixed; width:9px; height:13px; z-index:200; pointer-events:none; border-radius:2px; }
-.mole-trow{ display:flex; align-items:center; justify-content:center; gap:var(--sp-2); }
-.bighammer{ font-size:40px; line-height:1; transform:rotate(-14deg); filter:drop-shadow(0 3px 3px rgba(35,68,52,.3)); }
-.mole-target{ font-size:var(--fs-title); font-weight:800; }
-.mole-cn{ color:var(--muted); font-size:var(--fs-note); font-weight:700; margin:var(--sp-1) 0 var(--sp-2); }
+.mole-trow{ display:flex; align-items:center; justify-content:center; gap:var(--sp-3); flex-wrap:wrap; }
+.bighammer{ width:44px; height:44px; flex:0 0 auto; transform:rotate(-14deg); filter:drop-shadow(0 3px 3px rgba(35,68,52,.3)); }
+.bighammer svg{ width:100%; height:100%; display:block; }
+.mole-listen{ font-size:20px; min-height:56px; padding:var(--sp-3) var(--sp-6); }
 .molefield{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-3) var(--sp-2); margin-top:var(--sp-4); background:linear-gradient(180deg,var(--fill),var(--bg-deep)); border:2.5px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--clay); padding:var(--sp-3); }
-.hole{ position:relative; height:148px; overflow:hidden; border-radius:var(--r-md); }
+@media (hover:hover) and (pointer:fine){ .molefield{ cursor:none; } }
+.hole{ position:relative; height:168px; overflow:hidden; border-radius:var(--r-md); }
 .holeshadow{ position:absolute; left:50%; transform:translateX(-50%); bottom:4px; width:86%; height:20px; border-radius:50%; background:rgba(35,68,52,.28); filter:blur(5px); }
 .holerim{ position:absolute; left:50%; transform:translateX(-50%); bottom:20px; width:97%; height:54px; border-radius:50%; z-index:1; background-color:#96622f; background-image:radial-gradient(rgba(59,35,13,.55) 1.3px, transparent 1.7px), radial-gradient(rgba(255,226,175,.4) 1px, transparent 1.5px), radial-gradient(ellipse at 50% 38%, #b57f42 0%, #96622f 58%, #77491f 100%); background-size:9px 9px, 7px 7px, 100% 100%; background-position:0 0, 3px 4px, 0 0; }
 .holepit{ position:absolute; left:50%; transform:translateX(-50%); bottom:25px; width:84%; height:44px; border-radius:50%; z-index:2; background:radial-gradient(ellipse at 50% 42%, #221304 0%, #38220e 55%, #523218 84%, #654222 100%); box-shadow:inset 0 9px 13px rgba(0,0,0,.7), inset 0 -3px 5px rgba(255,220,170,.16); }
@@ -280,9 +281,9 @@ table.pro tr.prow.playing td{ background:var(--accent-bg); }
 .grass.l{ left:0; }
 .grass.r{ right:0; transform:scaleX(-1); }
 .grass svg{ width:100%; height:100%; display:block; }
-.mole{ position:absolute; left:50%; bottom:22px; transform:translate(-50%,135%); transition:transform .18s ease; width:100px; min-height:44px; background:none; border:none; padding:0; display:flex; flex-direction:column; align-items:center; cursor:pointer; z-index:3; }
+.mole{ position:absolute; left:50%; bottom:22px; transform:translate(-50%,118%); transition:transform .18s ease; width:100px; min-height:44px; background:none; border:none; padding:0; display:flex; flex-direction:column; align-items:center; cursor:pointer; z-index:3; }
 .mole.up{ transform:translate(-50%,0); }
-.molestar{ position:absolute; top:-14px; right:2px; font-size:20px; opacity:0; pointer-events:none; z-index:3; }
+.molestar{ position:absolute; top:36px; right:0; font-size:20px; opacity:0; pointer-events:none; z-index:3; }
 .mole.right .molestar{ opacity:1; animation:moleStar .8s ease-out; }
 @keyframes moleStar{ 0%{ transform:translateY(6px) scale(.4) rotate(-20deg); opacity:0; } 35%{ opacity:1; } 100%{ transform:translateY(-14px) scale(1.15) rotate(20deg); opacity:1; } }
 .molepicwrap{ display:block; width:82px; height:82px; border-radius:50%; overflow:hidden; border:3px solid var(--border); background:#fff; box-shadow:var(--clay-sm); flex:0 0 auto; }
@@ -290,14 +291,18 @@ table.pro tr.prow.playing td{ background:var(--accent-bg); }
 .mole.right .molepicwrap{ border-color:var(--primary); box-shadow:0 0 0 4px var(--primary), 0 0 18px rgba(76,154,98,.55); animation:moleSquash .38s ease; }
 .mole.wrong .molepicwrap{ border-color:var(--danger); animation:shake .3s ease 2; }
 @keyframes moleSquash{ 0%{ transform:scale(1); } 40%{ transform:scale(.88); } 70%{ transform:scale(1.06); } 100%{ transform:scale(1); } }
-.moleword{ display:flex; align-items:center; justify-content:center; width:56px; height:44px; margin-top:-12px; background:#fff; border:2.5px solid var(--border); border-radius:var(--r-sm); box-shadow:var(--clay-sm); overflow:hidden; position:relative; z-index:2; }
-.moleword img{ width:100%; height:100%; object-fit:cover; display:block; }
-.moleword .shapebox{ width:100%; height:100%; }
-.hithammer{ position:absolute; top:0; left:50%; margin-left:-4px; font-size:46px; line-height:1; z-index:6; opacity:0; pointer-events:none; transform:rotate(-38deg); transform-origin:20% 85%; filter:drop-shadow(0 3px 3px rgba(35,68,52,.35)); }
+.moleword{ display:flex; align-items:center; justify-content:center; min-width:76px; max-width:150px; width:auto; min-height:36px; margin-top:0; margin-bottom:6px; padding:4px 10px; background:#fff; border:2.5px solid var(--border); border-radius:var(--r-sm); box-shadow:var(--clay-sm); font-size:22px; font-weight:800; color:#234434; line-height:1.15; text-align:center; position:relative; z-index:2; }
+.hithammer{ position:absolute; top:0; left:50%; margin-left:-26px; width:52px; height:52px; z-index:6; opacity:0; pointer-events:none; transform:rotate(-38deg); transform-origin:20% 85%; filter:drop-shadow(0 3px 3px rgba(35,68,52,.35)); }
+.hithammer svg{ width:100%; height:100%; display:block; }
 .hole.smash .hithammer{ opacity:1; animation:hammerHit .5s ease; }
 @keyframes hammerHit{ 0%{ transform:rotate(-38deg) translateY(-12px); opacity:0; } 25%{ opacity:1; } 45%{ transform:rotate(16deg) translateY(9px); } 65%{ transform:rotate(-8deg) translateY(3px); } 100%{ transform:rotate(-2deg) translateY(5px); opacity:1; } }
-@media (max-width:560px){ .hole{ height:138px; } .molepicwrap{ width:72px; height:72px; } .mole{ width:92px; } .bighammer{ font-size:34px; } .hithammer{ font-size:40px; } }
-@media (prefers-reduced-motion: reduce){ .mole{ transition:none; } .mole.right .molestar, .mole.right .molepicwrap, .mole.wrong .molepicwrap, .hole.smash .hithammer{ animation:none; } }
+#moleCursorHammer{ position:fixed; width:56px; height:56px; pointer-events:none; z-index:200; display:none; transform:translate(-14px,-48px) rotate(-18deg); filter:drop-shadow(0 3px 3px rgba(35,68,52,.35)); }
+#moleCursorHammer svg{ width:100%; height:100%; display:block; }
+#moleCursorHammer.on{ display:block; }
+#moleCursorHammer.smash{ animation:cursorSmash .35s ease; }
+@keyframes cursorSmash{ 0%{ transform:translate(-14px,-48px) rotate(-18deg); } 40%{ transform:translate(-14px,-40px) rotate(14deg); } 100%{ transform:translate(-14px,-48px) rotate(-18deg); } }
+@media (max-width:560px){ .hole{ height:158px; } .molepicwrap{ width:72px; height:72px; } .mole{ width:92px; } .moleword{ font-size:19px; min-width:64px; max-width:120px; } .bighammer{ width:36px; height:36px; } .hithammer{ width:44px; height:44px; margin-left:-22px; } }
+@media (prefers-reduced-motion: reduce){ .mole{ transition:none; } .mole.right .molestar, .mole.right .molepicwrap, .mole.wrong .molepicwrap, .hole.smash .hithammer, #moleCursorHammer.smash{ animation:none; } }
 .toolbtn{ border:2.5px solid var(--border); background:var(--panel); box-shadow:var(--clay-sm); min-height:44px;
   border-radius:var(--r-pill); padding:var(--sp-2) var(--sp-4); font-size:var(--fs-note); font-weight:700; }
 .toolbtn.on{ background:var(--primary); color:#fff; border-color:var(--primary); }
@@ -1160,17 +1165,16 @@ function confetti(){
 /* ---------- ⑦ Whack-a-Mole ---------- */
 var moleOnShow = null, moleStopTimer = null;
 (function(){
+  var HAMMER_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="25" y="20" width="14" height="8" rx="3" fill="#8A94A6"/><rect x="10" y="6" width="44" height="18" rx="7" fill="#6B7280" stroke="#434A55" stroke-width="1.5"/><rect x="10" y="6" width="12" height="18" rx="7" fill="#9AA3B2"/><rect x="46" y="9" width="8" height="12" rx="3" fill="#434A55"/><rect x="27" y="24" width="10" height="34" rx="5" fill="#A06C36" stroke="#7A4E22" stroke-width="1.5"/><rect x="27" y="48" width="10" height="10" rx="5" fill="#7A4E22"/></svg>';
   var pg = pageEls["game-mole"];
   pg.appendChild(el("h2","sec","打地鼠 Whack-a-Mole"));
-  pg.appendChild(el("p","sub","听一听目标单词，打中带着对应图片的地鼠！一局 15 个词，地鼠越冒越快。答对得星星 ⭐"));
+  pg.appendChild(el("p","sub","听一听单词，打中头顶顶着这个单词的地鼠！一局 15 个词，越打越快。答对得星星 ⭐"));
   var card = el("div","qcard");
   var center = el("div"); center.style.textAlign = "center";
   var trow = el("div","mole-trow");
-  var bh = el("span","bighammer","🔨"); trow.appendChild(bh);
-  var tgt = el("div","mole-target","—"); trow.appendChild(tgt);
+  var bh = el("span","bighammer"); bh.innerHTML = HAMMER_SVG; bh.setAttribute("aria-hidden","true"); trow.appendChild(bh);
+  var playBtn = el("button","bigplay mole-listen","🔊 Listen"); trow.appendChild(playBtn);
   center.appendChild(trow);
-  var cn = el("div","mole-cn",""); center.appendChild(cn);
-  var playBtn = el("button","bigplay","🔊 再听一遍"); center.appendChild(playBtn);
   card.appendChild(center);
   var field = el("div","molefield"); card.appendChild(field);
   var fb = el("div","feedback"); card.appendChild(fb);
@@ -1190,77 +1194,146 @@ var moleOnShow = null, moleStopTimer = null;
       h.appendChild(el("div","holepit"));
       var m = el("button","mole"); m.type = "button";
       m.appendChild(el("span","molestar","💫"));
+      /* 大字英文单词在地鼠头顶上方（单词在上、地鼠在下，一起冒出缩回），身上不放图片词卡 */
+      m.appendChild(el("span","moleword"));
       var pw = el("span","molepicwrap");
       var pic = document.createElement("img"); pic.className = "molepic"; pic.src = MOLE_IMG; pic.alt = ""; pic.draggable = false;
       pw.appendChild(pic); m.appendChild(pw);
-      m.appendChild(el("span","moleword"));
       m.addEventListener("click", function(){ tapMole(m); });
       h.appendChild(m);
       var g1 = el("span","grass l"); g1.innerHTML = GRASS_SVG; h.appendChild(g1);
       var g2 = el("span","grass r"); g2.innerHTML = GRASS_SVG; h.appendChild(g2);
-      h.appendChild(el("span","hithammer","🔨"));
+      var hh = el("span","hithammer"); hh.innerHTML = HAMMER_SVG; h.appendChild(hh);
       field.appendChild(h); moleEls.push(m);
     })();
   }
-  var moleOrder = shuffle(WORDS35).slice(0,15), moleIdx = 0, moleDone = 0, moleLock = false, moleCur = null, moleTimer = null, moleDoneAll = false;
-  function moleSpeed(){ return Math.max(800, 1400 - moleIdx*60); }
-  function stopT(){ if(moleTimer){ clearInterval(moleTimer); moleTimer = null; } }
-  function startT(){ stopT(); if(!moleCur || moleLock || moleDoneAll) return; if(!pg.classList.contains("on")) return; moleTimer = setInterval(moleWave, moleSpeed()); }
-  moleStopTimer = stopT;
-  function hideAll(){ moleEls.forEach(function(m){ m.classList.remove("up","right","wrong"); if(m.parentNode) m.parentNode.classList.remove("smash"); }); }
-  function moleWave(){
-    if(!moleCur || moleLock || moleDoneAll || !pg.classList.contains("on")) return;
-    hideAll();
-    var holes = shuffle([0,1,2,3,4,5,6,7,8]).slice(0,3);
-    var words = shuffle([moleCur].concat(pickN(WORDS35, 2, moleCur)));
-    for(var k=0;k<3;k++){
-      var m = moleEls[holes[k]], wd = words[k];
-      m._wd = wd; m.setAttribute("data-w", wd.w);
-      var mw = m.querySelector(".moleword"); mw.innerHTML = ""; mw.appendChild(wordMedia(wd));
-      m.classList.add("up");
-    }
+  /* 桌面端：SVG 大锤跟随指针；触屏点按时在落点出现并砸下 */
+  var ch = document.createElement("div"); ch.id = "moleCursorHammer"; ch.innerHTML = HAMMER_SVG; ch.setAttribute("aria-hidden","true");
+  document.body.appendChild(ch);
+  field.addEventListener("mousemove", function(e){ ch.style.left = e.clientX + "px"; ch.style.top = e.clientY + "px"; ch.classList.add("on"); });
+  field.addEventListener("mouseleave", function(){ ch.classList.remove("on"); });
+  field.addEventListener("pointerdown", function(e){
+    ch.style.left = e.clientX + "px"; ch.style.top = e.clientY + "px"; ch.classList.add("on");
+    ch.classList.remove("smash"); void ch.offsetWidth; ch.classList.add("smash");
+    if(e.pointerType !== "mouse"){ setTimeout(function(){ ch.classList.remove("on"); }, 450); }
+  });
+
+  /* 节奏：每 1000ms 冒一只、每只停留 1500ms；每打中一只各快 20ms，下限间隔 700ms、停留 1000ms */
+  var MOLE_N = 15, MOLE_CHANCE = 0.35, MOLE_STEP = 20, MOLE_MIN_INTERVAL = 700, MOLE_MIN_DWELL = 1000;
+  var moleOrder = shuffle(WORDS35).slice(0,MOLE_N), moleIdx = 0, moleDone = 0, moleCur = moleOrder[0] || null;
+  var moleInterval = 1000, moleDwell = 1500;
+  var moleStarted = false, molePaused = true, moleDoneAll = false;
+  var spawnTimer = null, hideTimers = [], tokenSeq = 0;
+  function stopSpawn(){ if(spawnTimer){ clearTimeout(spawnTimer); spawnTimer = null; } }
+  function clearHide(){ hideTimers.forEach(function(t){ clearTimeout(t); }); hideTimers = []; }
+  function clearMoles(except){
+    moleEls.forEach(function(m){
+      if(m !== except) m.classList.remove("up","right","wrong");
+      var holeEl = m.parentNode;
+      if(holeEl && (!except || holeEl !== except.parentNode)) holeEl.classList.remove("smash");
+    });
   }
-  function nextMole(){
-    moleLock = false; moleCur = null; stopT(); hideAll(); again.style.display = "none";
-    if(moleIdx >= moleOrder.length){
-      moleDoneAll = true;
-      bh.textContent = "🎉"; tgt.textContent = "全部打完啦！"; cn.textContent = "";
-      fb.textContent = "🎉 15 只地鼠都打中啦！这些单词你都认识啦！"; fb.className = "feedback good";
-      prog.textContent = "已打中 " + moleDone + " / " + moleOrder.length + " 个";
-      again.style.display = ""; sfxWin(); confetti(); return;
+  function stopT(){
+    molePaused = true; stopSpawn(); clearHide(); clearMoles();
+    ch.classList.remove("on");
+  }
+  moleStopTimer = stopT;
+  function freeMole(){
+    var free = moleEls.filter(function(m){ return !m.classList.contains("up"); });
+    if(!free.length) return null;
+    return free[Math.floor(Math.random()*free.length)];
+  }
+  function spawnMole(word){
+    var m = freeMole(); if(!m) return null;
+    var token = ++tokenSeq;
+    m._wd = word; m._token = token; m.setAttribute("data-w", word.w);
+    m.querySelector(".moleword").textContent = word.w;
+    m.classList.remove("right","wrong");
+    m.classList.add("up");
+    var t = setTimeout(function(){ if(m._token === token) m.classList.remove("up"); }, moleDwell);
+    hideTimers.push(t);
+    return m;
+  }
+  function spawnRandom(){
+    if(!moleStarted || moleDoneAll || molePaused || !moleCur) return;
+    var word;
+    if(Math.random() < MOLE_CHANCE){ word = moleCur; }
+    else{
+      var pool = WORDS35.filter(function(w){ return w !== moleCur; });
+      word = pool[Math.floor(Math.random()*pool.length)];
     }
-    var it = moleOrder[moleIdx]; moleCur = it;
-    bh.textContent = "🔨"; tgt.textContent = "打：" + it.w; cn.textContent = it.zh + " · 听到它就打它！";
-    fb.textContent = ""; fb.className = "feedback";
-    prog.textContent = "第 " + (moleIdx+1) + " / " + moleOrder.length + " 个 · 已打中 " + moleDone + " 个 · 地鼠越来越快！";
-    if(pg.classList.contains("on")){ playAud(it.aud, null); startT(); }
+    if(word) spawnMole(word);
+    spawnTimer = setTimeout(spawnRandom, moleInterval);
+  }
+  function schedule(){ stopSpawn(); if(!moleStarted || moleDoneAll || molePaused) return; spawnTimer = setTimeout(spawnRandom, moleInterval); }
+  function renderProg(){
+    prog.textContent = moleDoneAll
+      ? "已打中 " + moleDone + " / " + moleOrder.length + " 个"
+      : "第 " + (moleIdx+1) + " / " + moleOrder.length + " 个 · 已打中 " + moleDone + " 个 · 听一听，打中它！";
+  }
+  function playTarget(){ if(moleCur && pg.classList.contains("on")) playAud(moleCur.aud, null); }
+  function finishRound(){
+    moleDoneAll = true; molePaused = true;
+    stopSpawn(); clearHide(); clearMoles();
+    fb.textContent = "🎉 15 只地鼠都打中啦！这些单词你都认识啦！"; fb.className = "feedback good";
+    renderProg();
+    again.style.display = ""; sfxWin(); confetti();
+  }
+  function startRound(){
+    moleOrder = shuffle(WORDS35).slice(0,MOLE_N); moleIdx = 0; moleDone = 0;
+    moleInterval = 1000; moleDwell = 1500;
+    moleDoneAll = false; moleStarted = true; molePaused = false;
+    moleCur = moleOrder[0] || null;
+    again.style.display = "none";
+    fb.textContent = "🔊 听一听，打中头顶顶着这个单词的地鼠！"; fb.className = "feedback";
+    renderProg();
+    stopSpawn(); clearHide(); clearMoles();
+    playTarget();
+    spawnRandom();
   }
   function tapMole(m){
-    if(moleLock || !moleCur || moleDoneAll) return;
+    if(!moleStarted || moleDoneAll || molePaused || !moleCur) return;
     if(!m.classList.contains("up")) return;
     var wd = m._wd; if(!wd) return;
+    var holeEl = m.parentNode;
     if(wd.w === moleCur.w){
-      moleLock = true; stopT(); m.classList.add("right");
-      var holeEl = m.parentNode; if(holeEl){ holeEl.classList.add("smash"); setTimeout(function(){ holeEl.classList.remove("smash"); }, 950); }
-      fb.textContent = "✅ 打中啦！" + moleCur.w + "（" + moleCur.zh + "）！"; fb.className = "feedback good";
+      m.classList.add("right");
+      if(holeEl){ holeEl.classList.add("smash"); setTimeout(function(){ holeEl.classList.remove("smash"); }, 950); }
+      fb.textContent = "✅ 打中啦！" + wd.w + "！听一听，下一个！"; fb.className = "feedback good";
       sfxGood(); regOK(); addStars(1); moleDone++;
-      playAud(moleCur.aud, null);
-      setTimeout(function(){ moleIdx++; nextMole(); }, 1400);
+      moleInterval = Math.max(MOLE_MIN_INTERVAL, moleInterval - MOLE_STEP);
+      moleDwell = Math.max(MOLE_MIN_DWELL, moleDwell - MOLE_STEP);
+      moleIdx++;
+      clearMoles(m); clearHide(); stopSpawn();
+      var tk = m._token;
+      setTimeout(function(){ if(m._token === tk) m.classList.remove("up","right"); }, 600);
+      if(moleIdx >= moleOrder.length){ finishRound(); return; }
+      moleCur = moleOrder[moleIdx];
+      renderProg();
+      playTarget();
+      schedule();
     }else{
-      m.classList.add("wrong");
-      fb.textContent = "❌ 打错啦！那是「" + wd.w + " " + wd.zh + "」，要打的是「" + moleCur.w + "」。"; fb.className = "feedback bad";
+      m.classList.remove("wrong"); void m.offsetWidth; m.classList.add("wrong");
+      if(holeEl){ holeEl.classList.add("smash"); setTimeout(function(){ holeEl.classList.remove("smash"); }, 950); }
+      fb.textContent = "❌ 打错啦！那是「" + wd.w + "」，再听一听，打中你听到的那个词！"; fb.className = "feedback bad";
       sfxBad(); regBad();
-      setTimeout(function(){ if(m._wd === wd) m.classList.remove("up","wrong"); }, 350);
+      var tk2 = m._token;
+      setTimeout(function(){ if(m._token === tk2) m.classList.remove("up","wrong"); }, 350);
     }
   }
-  playBtn.addEventListener("click", function(){ if(moleCur) playAud(moleCur.aud, playBtn); });
-  again.addEventListener("click", function(){ sfxTap(); moleOrder = shuffle(WORDS35).slice(0,15); moleIdx = 0; moleDone = 0; moleDoneAll = false; nextMole(); });
+  playBtn.addEventListener("click", function(){ if(moleCur && !moleDoneAll) playAud(moleCur.aud, playBtn); });
+  again.addEventListener("click", function(){ sfxTap(); startRound(); });
   moleOnShow = function(){
-    if(moleDoneAll || moleLock) return;
-    if(moleCur){ playAud(moleCur.aud, null); startT(); }
-    else nextMole();
+    if(moleDoneAll) return;
+    if(!moleStarted){ startRound(); return; }
+    molePaused = false;
+    clearMoles();
+    renderProg();
+    playTarget();
+    schedule();
   };
-  nextMole();
+  fb.textContent = "🔊 听一听，打中头顶顶着这个单词的地鼠！";
+  renderProg();
 })();
 /* init */
 document.getElementById("starNum").textContent = stars;
