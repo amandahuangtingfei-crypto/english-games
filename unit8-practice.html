@@ -144,7 +144,7 @@ footer{text-align:center;color:var(--ink-soft);font-size:13px;padding:12px}
 .mole-mole.mole-wrong .mole-molepicwrap{border-color:#D63A2F;animation:mole-shake .3s ease 2}
 @keyframes moleSquash{0%{transform:scale(1)}40%{transform:scale(.88)}70%{transform:scale(1.06)}100%{transform:scale(1)}}
 @keyframes mole-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.mole-moleword{display:flex;align-items:center;justify-content:center;min-width:76px;max-width:150px;width:auto;min-height:36px;margin-top:0;margin-bottom:6px;padding:4px 10px;background:#fff;border:2.5px solid #CBE3D0;border-radius:8px;box-shadow:0 2px 0 rgba(35,68,52,.12);font-size:22px;font-weight:800;color:#234434;line-height:1.15;position:relative;z-index:2}
+.mole-moleword{display:flex;align-items:center;justify-content:center;min-width:76px;max-width:150px;width:auto;min-height:36px;margin-top:0;margin-bottom:6px;padding:4px 10px;background:#fff;border:2.5px solid #CBE3D0;border-radius:8px;box-shadow:0 2px 0 rgba(35,68,52,.12);font-size:22px;font-weight:800;color:#234434;line-height:1.15;white-space:nowrap;position:relative;z-index:2}
 .mole-hithammer{position:absolute;top:0;left:50%;margin-left:-26px;width:52px;height:52px;z-index:6;opacity:0;pointer-events:none;transform:rotate(-38deg);transform-origin:20% 85%;filter:drop-shadow(0 3px 3px rgba(35,68,52,.35))}
 .mole-hithammer svg{width:100%;height:100%;display:block}
 .mole-hole.mole-smash .mole-hithammer{opacity:1;animation:moleHammerHit .5s ease}
@@ -293,17 +293,8 @@ footer{text-align:center;color:var(--ink-soft);font-size:13px;padding:12px}
         <button class="mole-listenbtn" id="mole-listenBtn" type="button">🔊 Listen</button>
       </div>
       <p class="mole-progress" id="mole-prog">还没开始 · 一共 20 只地鼠</p>
-      <p class="mole-statusline" id="mole-status">点“开始游戏”，先听声音，再打地鼠！</p>
+      <p class="mole-statusline" id="mole-status">听声音，打对单词的地鼠！</p>
       <div class="mole-molegrid" id="mole-moleGrid"></div>
-    </div>
-    <div class="mole-overlay" id="mole-startOverlay">
-      <div class="mole-panel">
-        <h2>🔨 打地鼠 · Unit 8 Around Town</h2>
-        <p>先认认这些词，点一点可以听发音：</p>
-        <div class="mole-reviewlist" id="mole-reviewList"></div>
-        <p style="font-size:13px;color:#4C7A5B">玩法：听目标词的发音，打中头顶写着这个词的地鼠！打错不扣星星，只会断掉连对。地鼠越打越快哦！</p>
-        <button class="mole-bigbtn" id="mole-startBtn" type="button">▶ 开始游戏</button>
-      </div>
     </div>
     <div class="mole-overlay" id="mole-endOverlay" hidden>
       <div class="mole-panel">
@@ -1057,6 +1048,21 @@ function moleFreeHole(){
   if(!free.length) return null;
   return free[Math.floor(Math.random() * free.length)];
 }
+/* 单词牌按词长自适应：先按长度给基础字号，再按洞口宽度缩到放得下为止（不换行、不断词；无布局环境如 jsdom 跳过） */
+function moleFitWord(wEl, mole){
+  var hole = mole.closest(".mole-hole");
+  if(!hole) return;
+  var maxW = hole.clientWidth - 4;
+  if(!(maxW > 0)) return;
+  wEl.style.maxWidth = maxW + "px";
+  wEl.style.whiteSpace = "nowrap";
+  var fs = parseFloat(wEl.style.fontSize) || 18;
+  var guard = 0;
+  while(fs > 11 && wEl.scrollWidth > wEl.clientWidth && guard++ < 20){
+    fs -= 1;
+    wEl.style.fontSize = fs + "px";
+  }
+}
 function moleSpawn(word){
   var hole = moleFreeHole();
   if(!hole) return null;
@@ -1066,6 +1072,7 @@ function moleSpawn(word){
   var wEl = mole.querySelector(".mole-moleword");
   wEl.textContent = word;
   wEl.style.fontSize = word.length <= 8 ? "22px" : (word.length <= 12 ? "18px" : "16px");
+  moleFitWord(wEl, mole);
   mole.classList.remove("mole-right", "mole-wrong");
   mole.classList.add("mole-up");
   var t = setTimeout(function(){
@@ -1154,7 +1161,6 @@ function startMole(){
   MOLE.started = true; MOLE.finished = false; MOLE.paused = false;
   resetCombo();
   moleRenderSpeed();
-  m$("mole-startOverlay").hidden = true;
   m$("mole-endOverlay").hidden = true;
   moleRenderTarget();
   m$("mole-status").textContent = "🔊 听声音，打对单词的地鼠！";
@@ -1173,8 +1179,11 @@ function moleResume(){
   moleRenderTarget();
   moleSchedule();
 }
+/* 点进打地鼠页签即开始（Amanda 2026-10-28）：未开始→直接开始；已暂停→恢复；已打完→不动，等“再玩一局” */
 window.__moleTabOn = function(){
-  if(MOLE.started && MOLE.paused) moleResume();
+  if(MOLE.finished) return;
+  if(!MOLE.started){ startMole(); return; }
+  if(MOLE.paused) moleResume();
 };
 window.__moleTabOff = function(){ molePause(); };
 /* ===== 搭建 ===== */
@@ -1207,20 +1216,10 @@ window.__moleTabOff = function(){ molePause(); };
   document.body.appendChild(ch);
   grid.addEventListener("mousemove", function(e){ ch.style.left = e.clientX + "px"; ch.style.top = e.clientY + "px"; ch.classList.add("on"); });
   grid.addEventListener("mouseleave", function(){ ch.classList.remove("on"); });
-  var rl = m$("mole-reviewList");
-  MOLE_WORDS.forEach(function(w){
-    var c = mel("button", "mole-chip"); c.type = "button";
-    var en = document.createElement("span"); en.textContent = w.en;
-    var zh = document.createElement("small"); zh.textContent = " " + w.zh;
-    c.appendChild(en); c.appendChild(zh);
-    c.addEventListener("click", function(){ molePlayWord(w.en, c); });
-    rl.appendChild(c);
-  });
   m$("mole-listenBtn").addEventListener("click", function(){
     var t = moleCurrent();
     if(t) molePlayWord(t, this);
   });
-  m$("mole-startBtn").addEventListener("click", function(){ startMole(); });
   m$("mole-againBtn").addEventListener("click", function(){ startMole(); });
   document.addEventListener("visibilitychange", function(){
     if(document.hidden) molePause(); else moleResume();
@@ -1241,6 +1240,7 @@ window.__MOLE__ = {
     };
   },
   start: startMole,
+  spawnWord: function(word){ return moleSpawn(word); },
   words: MOLE_WORDS.map(function(w){ return w.en; }),
   tapUpWord: function(word){
     var moles = document.querySelectorAll("#mole-moleGrid .mole-mole.mole-up");
