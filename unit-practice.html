@@ -151,7 +151,7 @@ footer{text-align:center;color:var(--ink-soft);font-size:13px;padding:10px}
 #sec-mole .mole.wrong .molepicwrap {border-color:#D63A2F;animation:moleShake .3s ease 2}
 @keyframes moleSquash {0%{transform:scale(1)}40%{transform:scale(.88)}70%{transform:scale(1.06)}100%{transform:scale(1)}}
 @keyframes moleShake {0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-#sec-mole .moleword {display:flex;align-items:center;justify-content:center;min-width:76px;max-width:150px;width:auto;min-height:36px;margin-top:0;margin-bottom:6px;padding:4px 10px;background:#fff;border:2.5px solid #CBE3D0;border-radius:8px;box-shadow:0 2px 0 rgba(35,68,52,.12);font-size:22px;font-weight:800;color:#234434;line-height:1.15;position:relative;z-index:2}
+#sec-mole .moleword {display:flex;align-items:center;justify-content:center;min-width:76px;max-width:150px;width:auto;min-height:36px;margin-top:0;margin-bottom:6px;padding:4px 10px;background:#fff;border:2.5px solid #CBE3D0;border-radius:8px;box-shadow:0 2px 0 rgba(35,68,52,.12);font-size:22px;font-weight:800;color:#234434;line-height:1.15;white-space:nowrap;position:relative;z-index:2}
 #sec-mole .hithammer {position:absolute;top:0;left:50%;margin-left:-26px;width:52px;height:52px;z-index:6;opacity:0;pointer-events:none;transform:rotate(-38deg);transform-origin:20% 85%;filter:drop-shadow(0 3px 3px rgba(35,68,52,.35))}
 #sec-mole .hithammer svg {width:100%;height:100%;display:block}
 #sec-mole .molehole.smash .hithammer {opacity:1;animation:hammerHit .5s ease}
@@ -186,7 +186,7 @@ footer{text-align:center;color:var(--ink-soft);font-size:13px;padding:10px}
 #sec-mole .pill{box-shadow:none}
 #sec-mole .progress{font-weight:400}
 #sec-mole .chip{opacity:1;pointer-events:auto}
-#sec-mole .moleword{width:auto;height:auto;overflow:visible;white-space:normal}
+#sec-mole .moleword{width:auto;height:auto;overflow:visible;white-space:nowrap}
 #sec-mole .overlay{z-index:60}
 #sec-mole .molepicwrap{overflow:hidden}
 
@@ -306,19 +306,9 @@ footer{text-align:center;color:var(--ink-soft);font-size:13px;padding:10px}
       <button class="listenbtn" id="mole-moleListen" type="button">🔊 Listen</button>
     </div>
     <p class="progress" id="mole-moleProg">还没开始 · 一共 20 只地鼠</p>
-    <p class="statusline" id="mole-moleStatus">点“开始游戏”，先听声音，再打地鼠！</p>
+    <p class="statusline" id="mole-moleStatus">听声音，打对单词的地鼠！</p>
     <div class="molegrid" id="mole-moleGrid"></div>
     </div>
-<div class="overlay" id="mole-startOverlay">
-  <div class="panel">
-    <h2>🔨 打地鼠 · 厨房单词</h2>
-    <p>先认认这些词，点一点可以听发音：</p>
-    <div class="reviewlist" id="mole-reviewList"></div>
-    <p style="font-size:13px;color:#4C7A5B">玩法：听目标词的发音，打中头顶写着这个词的地鼠！打错不扣星星，只会断掉连对。地鼠越打越快哦！</p>
-    <button class="bigbtn" id="mole-startBtn" type="button">▶ 开始游戏</button>
-  </div>
-</div>
-
 <div class="overlay" id="mole-endOverlay" hidden>
   <div class="panel">
     <h2>🎉 打完啦！</h2>
@@ -1236,7 +1226,7 @@ document.querySelectorAll("#tabs button").forEach(b=>{
     stopAll();
     if(b.dataset.sec === "balloon"){ if(window.__startBalloon) window.__startBalloon(); }
     else if(window.__stopBalloon) window.__stopBalloon();
-    if(b.dataset.sec === "mole"){ if(window.__moleResume) window.__moleResume(); }
+    if(b.dataset.sec === "mole"){ if(window.__moleEnter) window.__moleEnter(); }
     else if(window.__molePause) window.__molePause();
     window.scrollTo({top:0, behavior:"smooth"});
   });
@@ -1743,6 +1733,21 @@ function moleFreeHole(){
   if(!free.length) return null;
   return free[Math.floor(Math.random() * free.length)];
 }
+/* 单词牌按词长自适应：先按长度给基础字号，再按洞口宽度缩到放得下为止（不换行、不断词；无布局环境如 jsdom 跳过） */
+function moleFitWord(wEl, mole){
+  var hole = mole.closest(".molehole");
+  if(!hole) return;
+  var maxW = hole.clientWidth - 4;
+  if(!(maxW > 0)) return;
+  wEl.style.maxWidth = maxW + "px";
+  wEl.style.whiteSpace = "nowrap";
+  var fs = parseFloat(wEl.style.fontSize) || 18;
+  var guard = 0;
+  while(fs > 11 && wEl.scrollWidth > wEl.clientWidth && guard++ < 20){
+    fs -= 1;
+    wEl.style.fontSize = fs + "px";
+  }
+}
 function moleSpawn(word){
   var hole = moleFreeHole();
   if(!hole) return null;
@@ -1752,6 +1757,7 @@ function moleSpawn(word){
   var wEl = mole.querySelector(".moleword");
   wEl.textContent = word;
   wEl.style.fontSize = word.length <= 8 ? "22px" : (word.length <= 12 ? "18px" : "16px");
+  moleFitWord(wEl, mole);
   mole.classList.remove("right", "wrong");
   mole.classList.add("up");
   var t = setTimeout(function(){
@@ -1843,7 +1849,6 @@ function moleStart(){
   MOLE.started = true; MOLE.finished = false; MOLE.paused = false;
   resetCombo();
   moleRenderSpeed();
-  m$("mole-startOverlay").hidden = true;
   m$("mole-endOverlay").hidden = true;
   moleRenderTarget();
   m$("mole-moleStatus").textContent = "🔊 听声音，打对单词的地鼠！";
@@ -1857,9 +1862,17 @@ function molePause(){
 function moleResume(){
   if(!MOLE.started){ return; }
   if(MOLE.finished || !MOLE.paused) return;
+  var sec = document.getElementById("sec-mole");
+  if(sec && !sec.classList.contains("on")) return;
   MOLE.paused = false;
   moleRenderTarget();
   moleSchedule();
+}
+/* 点进打地鼠页签即开始（Amanda 2026-10-28）：未开始→直接开始；已暂停→恢复；已打完→不动，等“再玩一局” */
+function moleEnter(){
+  if(MOLE.finished) return;
+  if(!MOLE.started){ moleStart(); return; }
+  if(MOLE.paused) moleResume();
 }
 /* ===== 搭建 ===== */
 (function build(){
@@ -1891,25 +1904,16 @@ function moleResume(){
   document.body.appendChild(ch);
   grid.addEventListener("mousemove", function(e){ ch.style.left = e.clientX + "px"; ch.style.top = e.clientY + "px"; ch.classList.add("on"); });
   grid.addEventListener("mouseleave", function(){ ch.classList.remove("on"); });
-  var rl = m$("mole-reviewList");
-  MOLE_WORDS.forEach(function(w){
-    var c = el("button", "chip"); c.type = "button";
-    c.innerHTML = "";
-    var en = document.createElement("span"); en.textContent = w.en;
-    var zh = document.createElement("small"); zh.textContent = " " + w.zh;
-    c.appendChild(en); c.appendChild(zh);
-    c.addEventListener("click", function(){ molePlayWord(w.en, c); });
-    rl.appendChild(c);
-  });
   m$("mole-moleListen").addEventListener("click", function(){
     var t = moleCurrent();
     if(t) molePlayWord(t, this);
   });
-  m$("mole-startBtn").addEventListener("click", function(){ moleStart(); });
   m$("mole-againBtn").addEventListener("click", function(){ moleStart(); });
   document.addEventListener("visibilitychange", function(){
     if(document.hidden) molePause(); else moleResume();
   });
+  /* 独立版（无 sec-mole 页签）打开即直接开始；合并进宿主游戏时由页签进入触发 moleEnter */
+  if(!document.getElementById("sec-mole")) moleStart();
 })();
 /* ===== 自查钩子（仅供 jsdom 自查使用） ===== */
 window.__MOLE__ = {
@@ -1926,6 +1930,7 @@ window.__MOLE__ = {
     };
   },
   start: moleStart,
+  spawnWord: function(word){ return moleSpawn(word); },
   words: MOLE_WORDS.map(function(w){ return w.en; }),
   audioFor: function(w){ return MOLE_AUDIO[w]; },
   tapUpWord: function(word){
@@ -1946,6 +1951,7 @@ window.__MOLE__ = {
 };
 window.__molePause = molePause;
 window.__moleResume = moleResume;
+window.__moleEnter = moleEnter;
 
 </script>
 </body>
